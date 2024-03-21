@@ -21,6 +21,7 @@ vim.opt.guifont="Consolas:h11"
 vim.opt.guifontwide="NSimSun:h12"
 
 vim.opt.mouse = "a"
+vim.opt.termguicolors = true
 
 vim.opt.jumpoptions = "stack"
 
@@ -36,3 +37,5 @@ require "user_command"
 -- set syntax rules for glsl and hlsl
 vim.cmd('au BufNewFile,BufRead *.frag,*.vert,*.fp,*.vp,*.glsl,*.fsh,*.vsh setf glsl')
 vim.cmd('au BufNewFile,BufRead *.hlsl,*.fx,*.fxh,*.vsh,*.psh,*.shader setf fx')
+
+require "plugin_manager"
