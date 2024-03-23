@@ -55,3 +55,7 @@ vim.keymap.set({'n', 'v'}, ']d', function() vim.diagnostic.goto_next() end)
 
 vim.keymap.set('n', '<Leader>e', vim.diagnostic.open_float)
 vim.keymap.set('n', '<Leader>q', vim.diagnostic.setloclist)
+
+-- map ctrl-r + register not auto-indent in insert mode
+vim.keymap.set('i', '<C-R>', '<C-R><C-O>')
+
