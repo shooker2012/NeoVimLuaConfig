@@ -49,3 +49,9 @@ vim.keymap.set('n', '[t', 'vatatov', opts)
 vim.keymap.set('n', 'vP', '`[v`]', opts)
 vim.keymap.set('n', 'v<C-P>', '`[<C-V>`]', opts)
 
+-- Diagnostics
+vim.keymap.set({'n', 'v'}, '[d', function() vim.diagnostic.goto_prev() end)
+vim.keymap.set({'n', 'v'}, ']d', function() vim.diagnostic.goto_next() end)
+
+vim.keymap.set('n', '<Leader>e', vim.diagnostic.open_float)
+vim.keymap.set('n', '<Leader>q', vim.diagnostic.setloclist)

@@ -14,12 +14,12 @@ vim.opt.rtp:prepend(lazypath)
 
 local plugins = {
 	-- Underlying
-	'nvim-lua/plenary.nvim',
-	'nvim-lua/popup.nvim',
+	"nvim-lua/plenary.nvim",
+	"nvim-lua/popup.nvim",
 
 	-- New auto pairs.
 	{
-		'windwp/nvim-autopairs',
+		"windwp/nvim-autopairs",
 		event = "InsertEnter",
 		config = true
 		-- use opts = {} for passing setup options
@@ -37,19 +37,18 @@ local plugins = {
 	"williamboman/mason.nvim",
 	"williamboman/mason-lspconfig.nvim",
 	"neovim/nvim-lspconfig",
-	'jose-elias-alvarez/null-ls.nvim', -- LSP diagnostics and code actions
+	"jose-elias-alvarez/null-ls.nvim", -- LSP diagnostics and code actions
 
 
 	-- nvim-cmp
-	'hrsh7th/cmp-nvim-lsp',
-  	'hrsh7th/cmp-nvim-lua',
-
-	'hrsh7th/cmp-buffer',
-	'hrsh7th/cmp-path',
-	'hrsh7th/cmp-cmdline',
-	'saadparwaiz1/cmp_luasnip',
+	"hrsh7th/cmp-nvim-lsp",
+  	"hrsh7th/cmp-nvim-lua",
+	"hrsh7th/cmp-buffer",
+	"hrsh7th/cmp-path",
+	"hrsh7th/cmp-cmdline",
+	"saadparwaiz1/cmp_luasnip",
 	{
-		'hrsh7th/nvim-cmp',
+		"hrsh7th/nvim-cmp",
 		config = function(plugin, opts)
 			require "Plugins.nvim-cmp"
 		end,
@@ -78,14 +77,14 @@ local plugins = {
 
 	-- hop.nvim. supplant easy-motion.
 	{
-		'smoka7/hop.nvim',
-		tag = '*',
+		"smoka7/hop.nvim",
+		tag = "*",
 		opts = {},
 		config = function(plugin, opts)
-			require'hop'.setup(opts)
+			require"hop".setup(opts)
 		   
-			vim.keymap.set('', 's', function()
-				require('hop').hint_char2()
+			vim.keymap.set("", "s", function()
+				require("hop").hint_char2()
 			end, {remap=true})
 		end,
 	},
@@ -95,5 +94,5 @@ opts = nil
 
 require("lazy").setup(plugins, opts)
 
-require('Plugins.lsp')
+require("Plugins.lsp.lsp")
 
