@@ -30,6 +30,11 @@ M.setup = function()
 			header = "",
 			prefix = "",
 		},
+		signs = {
+			severity = {
+				min = vim.diagnostic.severity.WARN,
+			}
+		},
 	}
 
 	vim.diagnostic.config(config)
