@@ -19,15 +19,13 @@ local CopyMatches = function(args)
 		vim.cmd(string.format("%d,%d%s", args.line1, args.line2, "s//\\=len(add(hits, submatch(0)))/gen"))
 	end
 
+	local ret = table.concat(vim.g.hits, "\n")
 
 	local cur_pos = vim.api.nvim_win_get_cursor(0)
-	local reg = args.reg == "" and "*" or string.lower(args.reg)
-
-	-- clear register.
-	vim.cmd(string.format("let @%s = \"\"", reg))
 
 	-- copy matches to reigster
-	vim.cmd(string.format("let @%s = join(hits, \"\\n\")", reg))
+	local reg = args.reg == "" and "*" or string.lower(args.reg)
+	vim.fn.setreg(reg, ret)
 
 	-- back to position.
 	vim.api.nvim_win_set_cursor(0, cur_pos)
