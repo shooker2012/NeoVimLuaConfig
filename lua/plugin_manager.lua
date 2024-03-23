@@ -117,6 +117,24 @@ local plugins = {
 			-- "3rd/image.nvim", -- Optional image support in preview window: See `# Preview Mode` for more information
 		}
 	},
+
+	-- Statusline
+	{
+		"nvim-lualine/lualine.nvim",
+		dependencies = { "nvim-tree/nvim-web-devicons" },
+		config = function(plugin, opts)
+			require('lualine').setup({
+				sections = {
+					lualine_a = {'mode'},
+					lualine_b = {'filename'},
+					lualine_c = {'encoding', 'fileformat', 'filetype'},
+					lualine_x = {'progress'},
+					lualine_y = {'location'},
+					lualine_z = {'branch', 'diff', 'diagnostics'},
+				},
+			})
+		end,
+	},
 }
 
 opts = nil
