@@ -91,7 +91,7 @@ local plugins = {
 
 	-- Comment
 	{
-		'numToStr/Comment.nvim',
+		"numToStr/Comment.nvim",
 		opts = {},
 		lazy = false,
 	},
@@ -123,14 +123,14 @@ local plugins = {
 		"nvim-lualine/lualine.nvim",
 		dependencies = { "nvim-tree/nvim-web-devicons" },
 		config = function(plugin, opts)
-			require('lualine').setup({
+			require("lualine").setup({
 				sections = {
-					lualine_a = {'mode'},
-					lualine_b = {'filename'},
-					lualine_c = {'encoding', 'fileformat', 'filetype'},
-					lualine_x = {'progress'},
-					lualine_y = {'location'},
-					lualine_z = {'branch', 'diff', 'diagnostics'},
+					lualine_a = {"mode"},
+					lualine_b = {"filename"},
+					lualine_c = {"encoding", "fileformat", "filetype"},
+					lualine_x = {"progress"},
+					lualine_y = {"location"},
+					lualine_z = {"branch", "diff", "diagnostics"},
 				},
 			})
 		end,
