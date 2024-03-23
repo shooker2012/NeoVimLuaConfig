@@ -82,11 +82,18 @@ local plugins = {
 		opts = {},
 		config = function(plugin, opts)
 			require"hop".setup(opts)
-		   
+
 			vim.keymap.set("", "s", function()
 				require("hop").hint_char2()
 			end, {remap=true})
 		end,
+	},
+
+	-- Comment
+	{
+		'numToStr/Comment.nvim',
+		opts = {},
+		lazy = false,
 	},
 }
 
