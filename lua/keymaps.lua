@@ -32,8 +32,7 @@ vim.keymap.set('n', '<F9>', function()
 end, opts)
 
 -- map F10 to open current file's folder
-vim.keymap.set({'n', 'v'}, '<F10>', function() 
-    --io.popen("start explorer.exe /select,"..vim.api.nvim_call_function('expand', {"%:p"}))
+vim.keymap.set({'n', 'v'}, '<F10>', function()
     io.popen("start explorer.exe /select,"..vim.fn.expand("%:p"))
 end, opts)
 

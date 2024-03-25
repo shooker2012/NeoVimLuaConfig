@@ -135,6 +135,14 @@ local plugins = {
 			})
 		end,
 	},
+
+	-- Telescope
+	{
+		"nvim-telescope/telescope.nvim", 
+		config = function(plugins, opts)
+			require("Plugins.telescope")
+		end,
+	},
 }
 
 opts = nil
