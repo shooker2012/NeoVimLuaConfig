@@ -143,6 +143,9 @@ local plugins = {
 			require("Plugins.telescope")
 		end,
 	},
+
+	-- ============================================================Vimscript Plugins============================================================
+	"godlygeek/tabular", -- Tabular
 }
 
 opts = nil
