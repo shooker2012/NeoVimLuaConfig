@@ -138,11 +138,23 @@ local plugins = {
 
 	-- Telescope
 	{
-		"nvim-telescope/telescope.nvim", 
+		"nvim-telescope/telescope.nvim",
 		config = function(plugins, opts)
 			require("Plugins.telescope")
 		end,
 	},
+
+	-- Treesitter
+	{
+		"nvim-treesitter/nvim-treesitter",
+		config = function(plugins, opts)
+			require("Plugins.treessiter")
+		end,
+	},
+
+	-- Treesitter Extentions
+	"nvim-treesitter/nvim-treesitter-textobjects",
+	"nvim-treesitter/nvim-treesitter-context",
 }
 
 opts = nil

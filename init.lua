@@ -1,5 +1,5 @@
 vim.opt.backup = false
-vim.opt.clipboard = "unnamedplus"
+-- vim.opt.clipboard = "unnamedplus"					-- use system clipboard or not.
 vim.opt.fixendofline = false                            -- disable to add a unwanted newline at the end of the file.
 
 vim.opt.backspace = {"indent","eol","start"}            -- allow backspacing over everything in insert mode
@@ -28,6 +28,8 @@ vim.opt.jumpoptions = "stack"
 vim.opt.listchars = { tab="■■",trail = "▓",eol="▼"}
 
 vim.opt.autochdir = true
+
+vim.opt.foldenable = false
 
 --[[ Use neovide instead of the under codes.
 -- Autoreolad when file changed.
