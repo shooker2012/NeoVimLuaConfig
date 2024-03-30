@@ -148,13 +148,16 @@ local plugins = {
 	{
 		"nvim-treesitter/nvim-treesitter",
 		config = function(plugins, opts)
-			require("Plugins.treessiter")
+			require("Plugins.treesitter")
 		end,
 	},
 
 	-- Treesitter Extentions
 	"nvim-treesitter/nvim-treesitter-textobjects",
 	"nvim-treesitter/nvim-treesitter-context",
+
+	-- vim-matchup
+	"andymass/vim-matchup",
 }
 
 opts = nil
