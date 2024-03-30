@@ -158,6 +158,17 @@ local plugins = {
 
 	-- vim-matchup
 	"andymass/vim-matchup",
+
+	-- aerial.nvim
+	{
+		"stevearc/aerial.nvim",
+		config = function(plugins, opts)
+			require("aerial").setup()
+
+			-- keymap
+			vim.keymap.set("n", "<F4>", "<cmd>AerialToggle!<CR>")
+		end,
+	}
 }
 
 opts = nil
