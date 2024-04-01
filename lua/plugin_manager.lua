@@ -177,6 +177,9 @@ local plugins = {
 			require("sal-proj-lua")
 		end,
 	},
+
+	-- ============================================================Vimscript Plugins============================================================
+	"godlygeek/tabular", -- Tabular
 }
 
 opts = nil
