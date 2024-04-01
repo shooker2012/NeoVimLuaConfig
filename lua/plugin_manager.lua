@@ -168,7 +168,15 @@ local plugins = {
 			-- keymap
 			vim.keymap.set("n", "<F4>", "<cmd>AerialToggle!<CR>")
 		end,
-	}
+	},
+
+	-- Sal-proj
+	{
+		"shooker2012/sal-proj-lua",
+		config = function(plugins, opts)
+			require("sal-proj-lua")
+		end,
+	},
 }
 
 opts = nil
