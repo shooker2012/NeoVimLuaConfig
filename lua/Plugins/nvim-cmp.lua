@@ -45,13 +45,33 @@ cmp.setup({
 			end
 		end, { "i", "s" }),
 
+		-- Accept currently selected item. If none selected, `select` first item.
+		-- Set `select` to `false` to only confirm explicitly selected items.
+		["<CR>"] = cmp.mapping.confirm { select = true },
+
+		-- Snip jump
+		["<C-J>"] = cmp.mapping(function(fallback)
+			if luasnip and luasnip.jumpable(1) then
+				luasnip.jump(1)
+			else
+				fallback()
+			end
+		end, {"i", "s"}),
+		["<C-K>"] = cmp.mapping(function(fallback)
+			if luasnip and luasnip.jumpable(-1) then
+				luasnip.jump(-1)
+			else
+				fallback()
+			end
+		end, {"i", "s"}),
+
 		-- ... Your other mappings ...
 	},
 
 	sources = {
+		{ name = 'luasnip' },
 		{ name = 'nvim_lsp' },
 		{ name = "nvim_lua" },
-		{ name = 'luasnip' },
 		{ name = 'path' },
 		{ name = 'buffer' },
 	},
@@ -63,9 +83,9 @@ cmp.setup({
 		  vim_item.kind = string.format("[%s]", string.sub(vim_item.kind, 1, 1))
 		  -- vim_item.kind = string.format('%s %s', kind_icons[vim_item.kind], vim_item.kind) -- This concatonates the icons with the name of the item kind
 		  vim_item.menu = ({
+			luasnip = "[Snippet]",
 			nvim_lsp = "[LSP]",
 			nvim_lua = "[NVIM_LUA]",
-			luasnip = "[Snippet]",
 			buffer = "[Buffer]",
 			path = "[Path]",
 		  })[entry.source.name]

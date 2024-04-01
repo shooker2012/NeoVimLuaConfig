@@ -27,7 +27,7 @@ end, opts)
 -- map F9 to create a new tab and open currentfile and mirror NERDTREE
 vim.keymap.set('n', '<F9>', function()
     vim.cmd("tabe %")
-    vim.cmd(":NERDTreeFind")
+    vim.cmd(":Neotree reveal")
     vim.cmd.normal(vim.api.nvim_replace_termcodes("<C-W>l", true, true, true))
 end, opts)
 
