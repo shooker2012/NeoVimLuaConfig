@@ -4,7 +4,9 @@ if not telescope then return end
 -- keymaps
 local opts = {remap = false, silent = true}
 vim.keymap.set("n", "<c-p>", "<cmd>lua require'telescope.builtin'.find_files(require('telescope.themes').get_dropdown({ previewer = false }))<cr>", opts)
-vim.keymap.set("n", "<c-f>", "<cmd>Telescope live_grep<cr>", opts)
+vim.keymap.set("n", "<c-f>", function()
+	telescope.extensions.live_grep_args.live_grep_args()
+end, opts)
 
 
 local actions = require "telescope.actions"
@@ -76,7 +78,17 @@ telescope.setup{
 
         ["?"] = actions.which_key,
       },
-    }
+    },
+
+	vimgrep_arguments = {
+		"rg",
+		"--color=never",
+		"--no-heading",
+		"--with-filename",
+		"--line-number",
+		"--column",
+		-- "--smart-case"
+	},
   },
   pickers = {
     -- Default configuration for builtin pickers goes here:
@@ -93,5 +105,7 @@ telescope.setup{
     --   extension_config_key = value,
     -- }
     -- please take a look at the readme of the extension you want to configure
-  }
+  },
 }
+
+telescope.load_extension("live_grep_args")
