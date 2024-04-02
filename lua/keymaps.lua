@@ -1,6 +1,9 @@
 -- to copy and pase
 local opts = {remap = false, silent = true}
 
+ -- search and hightlight, but not move the next matching
+vim.keymap.set('n', '*', '*N', opts)
+
 vim.keymap.set('n', ',', '"0', opts)
 vim.keymap.set('v', ',', '"0', opts)
 vim.keymap.set('n', '_', ',', opts)
