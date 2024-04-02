@@ -82,6 +82,9 @@ telescope.setup{
       },
     },
 
+	default_mappings = {
+	},
+
 	vimgrep_arguments = {
 		"rg",
 		"--color=never",
