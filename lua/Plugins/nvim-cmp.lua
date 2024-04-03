@@ -5,6 +5,7 @@ local has_words_before = function()
 end
 
 local snip_status_ok, luasnip = pcall(require, "luasnip")
+local ultisnips_status_ok, cmp_ultisnips_mappings = pcall(require, "cmp_nvim_ultisnips.mappings")
 
 local cmp = require("cmp")
 
@@ -21,8 +22,10 @@ cmp.setup({
 				cmp.select_next_item()
 				-- You could replace the expand_or_jumpable() calls with expand_or_locally_jumpable() 
 				-- that way you will only jump inside the snippet region
-			elseif luasnip and luasnip.expand_or_jumpable() then
-				luasnip.expand_or_jump()
+			-- elseif luasnip and luasnip.expand_or_jumpable() then
+			-- 	luasnip.expand_or_jump()
+			elseif cmp_ultisnips_mappings then
+				cmp_ultisnips_mappings.expand_or_jump_forwards(fallback)
 			elseif has_words_before() then
 				--local keycode = vim.api.nvim_replace_termcodes("<C-n>", true, false, true)
 				--vim.api.nvim_feedkeys(keycode, "m", false)
@@ -36,8 +39,10 @@ cmp.setup({
 		["<S-Tab>"] = cmp.mapping(function(fallback)
 			if cmp.visible() then
 				cmp.select_prev_item()
-			elseif luasnip and luasnip.jumpable(-1) then
-				luasnip.jump(-1)
+			-- elseif luasnip and luasnip.jumpable(-1) then
+			-- 	luasnip.jump(-1)
+			elseif cmp_ultisnips_mappings then
+				cmp_ultisnips_mappings.jump_backwards(fallback)
 			elseif has_words_before() then
 				vim.api.nvim_input("<C-p>")
 			else
@@ -51,15 +56,25 @@ cmp.setup({
 
 		-- Snip jump
 		["<C-J>"] = cmp.mapping(function(fallback)
-			if luasnip and luasnip.jumpable(1) then
-				luasnip.jump(1)
+			-- if luasnip and luasnip.jumpable(1) then
+			-- 	luasnip.jump(1)
+			-- else
+			-- 	fallback()
+			-- end
+			if cmp_ultisnips_mappings then
+				cmp_ultisnips_mappings.expand_or_jump_forwards(fallback)
 			else
 				fallback()
 			end
 		end, {"i", "s"}),
 		["<C-K>"] = cmp.mapping(function(fallback)
-			if luasnip and luasnip.jumpable(-1) then
-				luasnip.jump(-1)
+			-- if luasnip and luasnip.jumpable(-1) then
+			-- 	luasnip.jump(-1)
+			-- else
+			-- 	fallback()
+			-- end
+			if cmp_ultisnips_mappings then
+				cmp_ultisnips_mappings.jump_backwards(fallback)
 			else
 				fallback()
 			end
@@ -69,7 +84,8 @@ cmp.setup({
 	},
 
 	sources = {
-		{ name = 'luasnip' },
+		-- { name = 'luasnip' },
+		{ name = 'ultisnips' },
 		{ name = 'nvim_lsp' },
 		{ name = "nvim_lua" },
 		{ name = 'path' },
@@ -83,7 +99,8 @@ cmp.setup({
 		  vim_item.kind = string.format("[%s]", string.sub(vim_item.kind, 1, 1))
 		  -- vim_item.kind = string.format('%s %s', kind_icons[vim_item.kind], vim_item.kind) -- This concatonates the icons with the name of the item kind
 		  vim_item.menu = ({
-			luasnip = "[Snippet]",
+			-- luasnip = "[Snippet]",
+			ultisnips = "[Snippet]",
 			nvim_lsp = "[LSP]",
 			nvim_lua = "[NVIM_LUA]",
 			buffer = "[Buffer]",
@@ -107,7 +124,10 @@ cmp.setup({
 
 	snippet = {
 		expand = function(args)
-			luasnip.lsp_expand(args.body)
+			-- luasnip.lsp_expand(args.body)
+			if cmp_ultisnips_mappings then
+				vim.fn["UltiSnips#Anon"](args.body)
+			end
 		end
 	},
 	-- ... Your other configuration ...

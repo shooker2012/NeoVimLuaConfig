@@ -26,15 +26,25 @@ local plugins = {
 		-- this is equalent to setup({}) function
 	},
 
-	-- LuaSnip
+	-- -- LuaSnip
+	-- {
+	-- 	"L3MON4D3/LuaSnip",
+	-- 	-- follow latest release.
+	-- 	--version = "v2.*", -- Replace <CurrentMajor> by the latest released major (first number of latest release)
+	-- 	config = function(plugin, opts)
+	-- 		require("luasnip.loaders.from_snipmate").lazy_load()
+	-- 	end,
+	-- },
+
+	-- UltiSnips
 	{
-		"L3MON4D3/LuaSnip",
-		-- follow latest release.
-		--version = "v2.*", -- Replace <CurrentMajor> by the latest released major (first number of latest release)
+		"SirVer/ultisnips",
 		config = function(plugin, opts)
-			require("luasnip.loaders.from_snipmate").lazy_load()
+			local path = vim.fn.fnamemodify(vim.env.MYVIMRC, ":p:h").."/ultisnips"
+			vim.g.UltiSnipsSnippetDirectories = {path}
 		end,
 	},
+	"quangnguyen30192/cmp-nvim-ultisnips",
 
 	-- LSP
 	"williamboman/mason.nvim",
