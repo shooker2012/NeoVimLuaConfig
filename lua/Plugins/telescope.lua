@@ -8,6 +8,10 @@ vim.keymap.set("n", "<c-f>", function()
 	telescope.extensions.live_grep_args.live_grep_args()
 end, opts)
 
+local live_grep_args_shortcuts = require("telescope-live-grep-args.shortcuts")
+vim.keymap.set("n", "<F3>", function() live_grep_args_shortcuts.grep_word_under_cursor() end, opts)
+vim.keymap.set("x", "<F3>", function() live_grep_args_shortcuts.grep_visual_selection() end, opts)
+
 
 local actions = require "telescope.actions"
 
