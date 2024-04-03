@@ -202,8 +202,27 @@ local plugins = {
 	},
 
 	-- ============================================================Vimscript Plugins============================================================
-	"godlygeek/tabular", -- Tabular
+	"godlygeek/tabular",    -- Tabular
+	"tommcdo/vim-exchange", -- vim exchange
+
+	-- vim mark
+	{
+		"inkarkat/vim-mark",
+		dependencies = {
+			"inkarkat/vim-ingo-library",
+		},
+	}
 }
+
+-- ============================================================Vimscript Plugins Configs============================================================
+vim.cmd([[
+"[plugin]mark
+nmap <Plug>IgnoreMarkSearchNext <Plug>MarkSearchNext
+nmap <Plug>IgnoreMarkSearchPrev <Plug>MarkSearchPrev
+
+nnoremap <silent> <C-l> :<C-u>nohlsearch<CR>:<C-u>MarkClear<CR><C-l>
+nnoremap <silent> <C-k> :<C-u>Mark<CR>
+]])
 
 opts = nil
 
