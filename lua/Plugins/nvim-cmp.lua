@@ -18,14 +18,14 @@ cmp.setup({
 		-- ... Your other mappings ...
 
 		["<Tab>"] = cmp.mapping(function(fallback)
-			if cmp.visible() then
+			if cmp_ultisnips_mappings then
+				cmp_ultisnips_mappings.expand_or_jump_forwards(fallback)
+			elseif cmp.visible() then
 				cmp.select_next_item()
 				-- You could replace the expand_or_jumpable() calls with expand_or_locally_jumpable() 
 				-- that way you will only jump inside the snippet region
 			-- elseif luasnip and luasnip.expand_or_jumpable() then
 			-- 	luasnip.expand_or_jump()
-			elseif cmp_ultisnips_mappings then
-				cmp_ultisnips_mappings.expand_or_jump_forwards(fallback)
 			elseif has_words_before() then
 				--local keycode = vim.api.nvim_replace_termcodes("<C-n>", true, false, true)
 				--vim.api.nvim_feedkeys(keycode, "m", false)
@@ -37,12 +37,12 @@ cmp.setup({
 		end, { "i", "s" }),
 
 		["<S-Tab>"] = cmp.mapping(function(fallback)
-			if cmp.visible() then
+			if cmp_ultisnips_mappings then
+				cmp_ultisnips_mappings.jump_backwards(fallback)
+			elseif cmp.visible() then
 				cmp.select_prev_item()
 			-- elseif luasnip and luasnip.jumpable(-1) then
 			-- 	luasnip.jump(-1)
-			elseif cmp_ultisnips_mappings then
-				cmp_ultisnips_mappings.jump_backwards(fallback)
 			elseif has_words_before() then
 				vim.api.nvim_input("<C-p>")
 			else
@@ -62,7 +62,7 @@ cmp.setup({
 			-- 	fallback()
 			-- end
 			if cmp_ultisnips_mappings then
-				cmp_ultisnips_mappings.expand_or_jump_forwards(fallback)
+				cmp_ultisnips_mappings.jump_forwards(fallback)
 			else
 				fallback()
 			end
