@@ -4,6 +4,19 @@ local opts = {remap = false, silent = true}
  -- search and hightlight, but not move the next matching
 vim.keymap.set('n', '*', '*N', opts)
 
+vim.cmd([[
+function! s:VSetSearch()
+	let temp = @s
+	norm! gv"sy
+	let @/ = '\V' . substitute(escape(@s, '/\'), '\n', '\\n', 'g')
+	let @s = temp
+endfunction
+
+" In visual mode, map* and # to search current selected.
+xnoremap * :<C-u>call <SID>VSetSearch()<CR>/<C-R>=@/<CR><CR>N
+xnoremap # :<C-u>call <SID>VSetSearch()<CR>?<C-R>=@/<CR><CR>
+]])
+
 vim.keymap.set('n', ',', '"0', opts)
 vim.keymap.set('v', ',', '"0', opts)
 vim.keymap.set('n', '_', ',', opts)
