@@ -15,6 +15,10 @@ endfunction
 " In visual mode, map* and # to search current selected.
 xnoremap * :<C-u>call <SID>VSetSearch()<CR>/<C-R>=@/<CR><CR>N
 xnoremap # :<C-u>call <SID>VSetSearch()<CR>?<C-R>=@/<CR><CR>
+
+" map F2 to search selected in current file
+nnoremap <F2> :vim //j %<CR>
+xnoremap <F2> :<C-u>call <SID>VSetSearch()<CR>/<C-R>=@/<CR><CR>N:vim /<C-R>=@/<CR>/j %<CR>
 ]])
 
 vim.keymap.set('n', ',', '"0', opts)
@@ -52,10 +56,6 @@ vim.keymap.set({'n', 'v'}, '<F10>', function()
     io.popen("start explorer.exe /select,"..vim.fn.expand("%:p"))
 end, opts)
 
-vim.keymap.set('n', 'F11', function()
-    local fileName = vim.fn.expand("%:p")
-end, opts)
-
 -- map [t and ]t: jump to parent tag
 vim.keymap.set('n', ']t', 'vatatv', opts)
 vim.keymap.set('n', '[t', 'vatatov', opts)
@@ -65,11 +65,11 @@ vim.keymap.set('n', 'vP', '`[v`]', opts)
 vim.keymap.set('n', 'v<C-P>', '`[<C-V>`]', opts)
 
 -- Diagnostics
-vim.keymap.set({'n', 'v'}, '[d', function() vim.diagnostic.goto_prev() end)
-vim.keymap.set({'n', 'v'}, ']d', function() vim.diagnostic.goto_next() end)
+vim.keymap.set({'n', 'v'}, '[d', function() vim.diagnostic.goto_prev() end, opts)
+vim.keymap.set({'n', 'v'}, ']d', function() vim.diagnostic.goto_next() end, opts)
 
-vim.keymap.set('n', '<Leader>e', vim.diagnostic.open_float)
-vim.keymap.set('n', '<Leader>q', vim.diagnostic.setloclist)
+vim.keymap.set('n', '<Leader>e', vim.diagnostic.open_float, opts)
+vim.keymap.set('n', '<Leader>q', vim.diagnostic.setloclist, opts)
 
 -- map ctrl-r + register not auto-indent in insert mode
 vim.keymap.set('i', '<C-R>', '<C-R><C-O>')
