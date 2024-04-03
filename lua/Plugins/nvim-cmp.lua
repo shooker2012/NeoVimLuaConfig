@@ -21,7 +21,7 @@ cmp.setup({
 			if cmp_ultisnips_mappings then
 				cmp_ultisnips_mappings.expand_or_jump_forwards(fallback)
 			elseif cmp.visible() then
-				cmp.select_next_item()
+				cmp.select_next_item({behavior = cmp.SelectBehavior.Insert})
 				-- You could replace the expand_or_jumpable() calls with expand_or_locally_jumpable() 
 				-- that way you will only jump inside the snippet region
 			-- elseif luasnip and luasnip.expand_or_jumpable() then
@@ -80,6 +80,8 @@ cmp.setup({
 			end
 		end, {"i", "s"}),
 
+		["<C-E>"] = cmp.abort,
+
 		-- ... Your other mappings ...
 	},
 
@@ -88,8 +90,9 @@ cmp.setup({
 		{ name = 'ultisnips' },
 		{ name = 'nvim_lsp' },
 		{ name = "nvim_lua" },
-		{ name = 'path' },
-		{ name = 'buffer' },
+		{ name = 'path', group_index = 2 },
+		{ name = 'buffer', group_index = 2 },
+		{ name = "copilot", group_index = 2 },
 	},
 
 	formatting = {
@@ -105,6 +108,7 @@ cmp.setup({
 			nvim_lua = "[NVIM_LUA]",
 			buffer = "[Buffer]",
 			path = "[Path]",
+			copilot = "[CO]",
 		  })[entry.source.name]
 		  return vim_item
 		end,
