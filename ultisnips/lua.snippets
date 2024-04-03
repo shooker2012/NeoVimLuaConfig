@@ -1,0 +1,212 @@
+snippet context
+context "$1" do
+	${0:${VISUAL:# assertions}}
+end
+endsnippet
+
+
+snippet fori=
+for i = $1, $2 do
+	${0:${VISUAL:--loop body }}
+end
+endsnippet
+
+
+snippet forip
+for ${1:i}, ${2:v} in ipairs($3) do
+	${0:${VISUAL:--loop body }}
+end
+endsnippet
+
+
+snippet forp
+for ${1:k}, ${2:v} in pairs($3) do
+	${0:${VISUAL:--loop body }}
+end
+endsnippet
+
+
+snippet log
+warn("~~~~~~~~~~log$1"$2)
+endsnippet
+
+
+snippet "logv (.*)" br
+warn( "~~~~~~~~~~log $1:", `!p
+
+text = match.group(1)
+values = text.split(',')
+
+params = ''
+for i,v in enumerate(values):
+	v = v.strip()
+	params += '"{0}: "..tostring({0})'.format( v )
+	if i != len(values)-1:
+		params += ", "
+snip.rv = params
+` )$0
+endsnippet
+
+snippet "lognil (.*)" br
+-- TEST_CODE
+`!p
+pos = 0
+text = match.group(1)
+
+while pos < len(text):
+	if pos != 0:
+		snip.rv += '\n'
+	p_dot = text.find('.', pos)
+	p_colon = text.find(':', pos)
+	if p_dot == -1 and p_colon == -1:
+		pos = len(text)
+	elif p_dot == -1:
+		pos = p_colon
+	elif p_colon == -1:
+		pos = p_dot
+	else:
+		pos = min(p_dot, p_colon)
+	snip.rv += snip.mkline( f'warn("~~~~~~~~~~log check nil: {text[:pos]}", {text[:pos]})' )
+	# snip += f'warn("~~~~~~~~~~log check nil: {text[:pos]}", {text[:pos]})' 
+	pos += 1
+`$0
+-- TEST_CODE_END
+endsnippet
+
+
+snippet watch
+"${1:${VISUAL}}: "..tostring($1)$0
+endsnippet
+
+snippet curtime
+`!v strftime("%Y %m %d") `
+endsnippet
+
+
+snippet if
+if $1 then
+	${0:${VISUAL:--body }}
+end
+endsnippet
+
+
+snippet func
+function($1)
+	$0
+end
+endsnippet
+
+
+snippet defm
+def.method($1).$2 = function(self$3)
+	$0
+end
+endsnippet
+
+
+snippet defv
+def.virtual($1).$2 = function(self$3)
+	$0
+end
+endsnippet
+
+
+snippet defo
+def.override($1).$2 = function(self$3)
+	$0
+end
+endsnippet
+
+snippet defs
+def.static($1).$2 = function($3)
+	$0
+end
+endsnippet
+
+
+snippet deff
+def.field("$1").$2 = $0
+endsnippet
+
+
+snippet debug
+warn("~~~~~~~~~~$1",$2 ${0:debug.traceback()})
+endsnippet
+
+
+
+snippet newclass
+local Lplus = require "Lplus"
+local $1 = Lplus.Class("$1")
+local def = $1.define
+
+$1.Commit()
+return $1
+endsnippet
+
+
+snippet exclass
+local Lplus = require "Lplus"
+local $1 = Lplus.Extend(${2:AzureActorBase}, "$1")
+local def = $1.define
+
+$1.Commit()
+return $1
+endsnippet
+
+
+snippet newpanel
+local Lplus = require "Lplus"
+local ECPanelBase = require "GUI.ECPanelBase"
+local $1 = Lplus.Extend(ECPanelBase, "$1")
+local def = $1.define
+
+local l_instance = nil
+def.static("=>", $1).Instance = function()
+	if not l_instance then
+		l_instance = $1()
+	end
+
+	return l_instance
+end
+
+def.override().OnCreate = function(self)
+end
+
+def.override().OnDestroy = function(self)
+end
+
+$1.Commit()
+return $1
+endsnippet
+
+
+snippet newevent
+local $1 = Lplus.Class("$1")
+do
+	local def = $1.define$2
+end
+$1.Commit()
+$0
+endsnippet
+
+
+snippet fd
+local $1 = Lplus.ForwardDeclare("$0$1")
+endsnippet
+
+
+snippet testcode
+-- [TEST_CODE]
+	${0:${VISUAL}}
+-- [TEST_CODE_END]
+endsnippet
+
+snippet localfunc
+local $1 = function($2)
+	$3
+end
+Lplus.handleLocalFunc()
+$0
+endsnippet
+
