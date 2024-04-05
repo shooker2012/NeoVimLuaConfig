@@ -38,10 +38,19 @@ vim.keymap.set('v', '<Leader>Y', '"*Y', opts)
 vim.keymap.set('n', '<Leader>D', '"*D', opts)
 vim.keymap.set('v', '<Leader>D', '"*D', opts)
 
--- map F5 to create a new tab and open currentfile and mirror NERDTREE
+-- map F5 to clear all swap files.
 vim.keymap.set('n', '<F5>', function()
-    io.popen("ctags -R .")
-    vim.cmd("UpdateTypesFile")
+	local swap_folder = vim.fn.fnamemodify(vim.fn.swapname(""), ":p:r")
+
+	-- Get all files and directories in CWD
+	local swap_files = vim.split(vim.fn.glob( swap_folder..".*"), '\n', {trimempty=true})
+
+	-- Check if specified file or directory exists
+	for _, file_name in pairs(swap_files) do
+		print("Clear swap file:", file_name)
+		os.remove(file_name)
+	end
+
 end, opts)
 
 -- map F9 to create a new tab and open currentfile and mirror NERDTREE
