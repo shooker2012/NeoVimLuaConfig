@@ -3,14 +3,16 @@ return {
 		Lua = {
 			diagnostics = {
 				globals = { "vim" },
+				disable = { "invisible", },
 			},
-	--		workspace = {
-	--			library = {
-	--				[vim.fn.expand("$VIMRUNTIME/lua")] = true,
-	--				[vim.fn.stdpath("config") .. "/lua"] = true,
-	--			},
-	--		},
+
+			workspace = {
+				preloadFileSize = 1000,
+				--			library = {
+					--				[vim.fn.expand("$VIMRUNTIME/lua")] = true,
+					--				[vim.fn.stdpath("config") .. "/lua"] = true,
+					--			},
+			},
 		},
 	},
 }
-
