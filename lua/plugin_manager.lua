@@ -186,10 +186,19 @@ local plugins = {
 	{
 		"stevearc/aerial.nvim",
 		config = function(plugins, opts)
-			require("aerial").setup()
+			local aerial = require("aerial")
+			aerial.setup()
 
+			local config = require("aerial.config")
 			-- keymap
-			vim.keymap.set("n", "<F4>", "<cmd>AerialToggle!<CR>")
+			vim.keymap.set("n", "<F4>", function()
+				config.close_on_select = true
+				aerial.toggle()
+			end, {remap = false, silent = true})
+			vim.keymap.set("n", "<S-F4>", function()
+				config.close_on_select = false
+				aerial.toggle()
+			end, {remap = false, silent = true})
 		end,
 	},
 
