@@ -3,7 +3,11 @@ if not telescope then return end
 
 -- keymaps
 local opts = {remap = false, silent = true}
-vim.keymap.set("n", "<c-p>", "<cmd>lua require'telescope.builtin'.find_files(require('telescope.themes').get_dropdown({ previewer = false }))<cr>", opts)
+vim.keymap.set("n", "<c-p>", function()
+	 local opts = require('telescope.themes').get_dropdown({ previewer = false })
+	 opts.find_by_full_path_words = false
+	 require'telescope.builtin'.find_files(opts)
+end, opts)
 vim.keymap.set("n", "<c-f>", function()
 	telescope.extensions.live_grep_args.live_grep_args()
 end, opts)
@@ -13,7 +17,19 @@ vim.keymap.set("n", "<F3>", function() live_grep_args_shortcuts.grep_word_under_
 vim.keymap.set("x", "<F3>", function() live_grep_args_shortcuts.grep_visual_selection() end, opts)
 
 
+
+
 local actions = require "telescope.actions"
+
+-- for utility functions
+local action_state = require "telescope.actions.state"
+
+local custom_actions = {}
+custom_actions.clear_prompt = function(prompt_bufnr)
+	local current_picker = action_state.get_current_picker(prompt_bufnr) -- picker state
+	current_picker:set_prompt("")
+	-- local entry = action_state.get_selected_entry()
+end
 
 telescope.setup{
   defaults = {
@@ -49,6 +65,8 @@ telescope.setup{
         ["<M-q>"] = actions.send_selected_to_qflist + actions.open_qflist,
         ["<C-l>"] = actions.complete_tag,
         ["<C-_>"] = actions.which_key, -- keys from pressing <C-/>
+
+        ["<C-u>"] = custom_actions.clear_prompt,
       },
 
       n = {
