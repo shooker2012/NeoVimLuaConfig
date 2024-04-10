@@ -18,7 +18,7 @@ cmp.setup({
 		-- ... Your other mappings ...
 
 		["<Tab>"] = cmp.mapping(function(fallback)
-			if cmp_ultisnips_mappings then
+			if cmp_ultisnips_mappings and vim.fn["UltiSnips#CanExpandSnippet"]() == 1 then
 				cmp_ultisnips_mappings.expand_or_jump_forwards(fallback)
 			elseif cmp.visible() then
 				cmp.select_next_item({behavior = cmp.SelectBehavior.Insert})
@@ -37,9 +37,7 @@ cmp.setup({
 		end, { "i", "s" }),
 
 		["<S-Tab>"] = cmp.mapping(function(fallback)
-			if cmp_ultisnips_mappings then
-				cmp_ultisnips_mappings.jump_backwards(fallback)
-			elseif cmp.visible() then
+			if cmp.visible() then
 				cmp.select_prev_item()
 			-- elseif luasnip and luasnip.jumpable(-1) then
 			-- 	luasnip.jump(-1)
