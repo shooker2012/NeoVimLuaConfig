@@ -160,6 +160,10 @@ local plugins = {
 				-- -- For major updates, this must be adjusted manually.
 				version = "^1.0.0",
 			},
+
+			{
+				"natecraddock/telescope-zf-native.nvim",
+			},
 		},
 
 		config = function(plugins, opts)
