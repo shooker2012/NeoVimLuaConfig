@@ -16,7 +16,9 @@ M.setup = function()
 		-- disable virtual text
 		virtual_text = false,
 		update_in_insert = false,
-		underline = {min=_G.sal_diagnostic_severity},
+		underline = {
+			severity = { min = _G.sal_diagnostic_severity },
+		},
 		severity_sort = true,
 		float = {
 			focusable = false,
@@ -27,9 +29,7 @@ M.setup = function()
 			prefix = "",
 		},
 		signs = {
-			severity = {
-				min = vim.diagnostic.severity.ERROR,
-			}
+			severity = { min = vim.diagnostic.severity.ERROR, }
 		},
 	}
 

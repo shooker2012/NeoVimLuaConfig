@@ -93,3 +93,46 @@ vnoremap <C-H> :<C-U>Hexmode<CR>
 " Hex mode end.==========
 ]])
 
+-- Set diagnostic severity
+function SetDiagnosticSeverity(arg_table)
+	-- Try get value.
+	local get_func = loadstring("return "..arg_table.args)
+	local s = get_func and get_func()
+	if not s then s = tonumber(arg_table.args) end
+
+	if not s or _G.sal_diagnostic_severity == s then
+		return
+	end
+	_G.sal_diagnostic_severity = s
+
+	local config = {
+		underline = {severity = {min=_G.sal_diagnostic_severity}},
+		-- signs = {severity = { min = vim.diagnostic.severity.ERROR, }},
+	}
+	vim.diagnostic.config(config)
+end
+
+local complete_func = function(arg_lead, cmd_line, cursor_pos)
+	local candidates = {
+    	"vim.diagnostic.severity.ERROR",
+    	"vim.diagnostic.severity.WARN",
+    	"vim.diagnostic.severity.INFO",
+    	"vim.diagnostic.severity.HINT",
+	}
+
+	-- Sort
+	for i, v in ipairs(candidates) do
+		if v:lower():find(arg_lead:lower()) then
+			if i ~= 0 then
+				table.remove(candidates, i)
+				table.insert(candidates, 1, v)
+			end
+			break
+		end
+	end
+
+	return candidates
+end
+
+vim.api.nvim_create_user_command("SetDiagnosticSeverity", SetDiagnosticSeverity, 
+	{nargs=1, complete=complete_func})
