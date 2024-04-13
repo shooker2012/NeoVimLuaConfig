@@ -74,8 +74,8 @@ vim.keymap.set('n', 'vP', '`[v`]', opts)
 vim.keymap.set('n', 'v<C-P>', '`[<C-V>`]', opts)
 
 -- Diagnostics
-vim.keymap.set({'n', 'v'}, '[d', function() vim.diagnostic.goto_prev() end, opts)
-vim.keymap.set({'n', 'v'}, ']d', function() vim.diagnostic.goto_next() end, opts)
+vim.keymap.set({'n', 'v'}, '[d', function() vim.diagnostic.goto_prev({severity = {min=_G.sal_diagnostic_severity}}) end, opts)
+vim.keymap.set({'n', 'v'}, ']d', function() vim.diagnostic.goto_next({severity = {min=_G.sal_diagnostic_severity}}) end, opts)
 
 vim.keymap.set('n', '<Leader>e', vim.diagnostic.open_float, opts)
 vim.keymap.set('n', '<Leader>q', vim.diagnostic.setloclist, opts)

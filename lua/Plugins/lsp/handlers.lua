@@ -15,12 +15,8 @@ M.setup = function()
 	local config = {
 		-- disable virtual text
 		virtual_text = false,
-		-- -- show signs
-		-- signs = {
-		--	 active = signs,
-		-- },
-		update_in_insert = true,
-		underline = true,
+		update_in_insert = false,
+		underline = {min=_G.sal_diagnostic_severity},
 		severity_sort = true,
 		float = {
 			focusable = false,
@@ -32,7 +28,7 @@ M.setup = function()
 		},
 		signs = {
 			severity = {
-				min = vim.diagnostic.severity.WARN,
+				min = vim.diagnostic.severity.ERROR,
 			}
 		},
 	}
