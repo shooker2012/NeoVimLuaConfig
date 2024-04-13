@@ -2,19 +2,23 @@ local status, telescope = pcall(require, "telescope")
 if not telescope then return end
 
 -- keymaps
-local opts = {remap = false, silent = true}
-vim.keymap.set("n", "<c-p>", function()
-	 local opts = require('telescope.themes').get_dropdown({ previewer = false })
-	 opts.find_by_full_path_words = false
-	 require'telescope.builtin'.find_files(opts)
-end, opts)
-vim.keymap.set("n", "<c-f>", function()
+local keymap_opts = {remap = false, silent = true}
+
+local function c_p()
+	local opts = require('telescope.themes').get_dropdown({ previewer = false })
+	opts.find_by_full_path_words = false
+	require'telescope.builtin'.find_files(opts)
+end
+local function c_f()
 	telescope.extensions.live_grep_args.live_grep_args()
-end, opts)
+end
+
+vim.keymap.set("n", "<c-p>", c_p, keymap_opts)
+vim.keymap.set("n", "<c-f>", c_f, keymap_opts)
 
 local live_grep_args_shortcuts = require("telescope-live-grep-args.shortcuts")
-vim.keymap.set("n", "<F3>", function() live_grep_args_shortcuts.grep_word_under_cursor() end, opts)
-vim.keymap.set("x", "<F3>", function() live_grep_args_shortcuts.grep_visual_selection() end, opts)
+vim.keymap.set("n", "<F3>", function() live_grep_args_shortcuts.grep_word_under_cursor() end, keymap_opts)
+vim.keymap.set("x", "<F3>", function() live_grep_args_shortcuts.grep_visual_selection() end, keymap_opts)
 
 
 
@@ -31,14 +35,33 @@ custom_actions.clear_prompt = function(prompt_bufnr)
 	-- local entry = action_state.get_selected_entry()
 end
 
+custom_actions.c_f = function(prompt_bufnr)
+	local current_picker = action_state.get_current_picker(prompt_bufnr) -- picker state
+	local prompt = current_picker:_get_prompt()
+	telescope.extensions.live_grep_args.live_grep_args({default_text = prompt})
+end
+
+custom_actions.c_p = function(prompt_bufnr)
+	local current_picker = action_state.get_current_picker(prompt_bufnr) -- picker state
+	local prompt = current_picker:_get_prompt()
+
+	local opts = require('telescope.themes').get_dropdown({ previewer = false })
+	opts.find_by_full_path_words = false
+	opts.default_text = prompt
+	require'telescope.builtin'.find_files(opts)
+end
+
 telescope.setup{
   defaults = {
     -- Default configuration for telescope goes here:
     -- config_key = value,
     mappings = {
       i = {
-        ["<C-n>"] = actions.cycle_history_next,
-        ["<C-p>"] = actions.cycle_history_prev,
+        ["<m-n>"] = actions.cycle_history_next,
+        ["<m-p>"] = actions.cycle_history_prev,
+
+		["<C-f>"] = custom_actions.c_f,
+		["<C-p>"] = custom_actions.c_p,
 
         ["<C-j>"] = actions.move_selection_next,
         ["<C-k>"] = actions.move_selection_previous,
@@ -71,6 +94,8 @@ telescope.setup{
 
       n = {
         ["<C-c>"] = actions.close,
+		["<C-f>"] = custom_actions.c_f,
+		["<C-p>"] = custom_actions.c_p,
 
         ["<esc>"] = actions.close,
         ["<CR>"] = actions.select_default,
