@@ -40,6 +40,8 @@ vim.api.nvim_create_autocmd({ "BufEnter", "CursorHold", "CursorHoldI", "FocusGai
 	})
 --]]
 
+-- Use this global value to control diagnostic goto_[prev/next] and underline.
+_G.sal_diagnostic_severity = vim.diagnostic.severity.WARN
 
 require "keymaps"
 
