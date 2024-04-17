@@ -44,11 +44,11 @@ for i,v in enumerate(values):
 	if i != len(values)-1:
 		params += ", "
 snip.rv = params
-` )$0
+` $0)
 endsnippet
 
 snippet "lognil (.*)" br
--- TEST_CODE
+-- [TEST_CODE]
 `!p
 pos = 0
 text = match.group(1)
@@ -70,7 +70,7 @@ while pos < len(text):
 	# snip += f'warn("~~~~~~~~~~log check nil: {text[:pos]}", {text[:pos]})' 
 	pos += 1
 `$0
--- TEST_CODE_END
+-- [TEST_CODE_END]
 endsnippet
 
 
