@@ -31,6 +31,11 @@ end
 vim.api.nvim_create_user_command('NT', function(arg_table)
 	local neotree_cmd = require("neo-tree.command")._command
 
+	-- force add show
+	if not vim.tbl_contains(arg_table.fargs, "show") then
+		table.insert(arg_table.fargs,  "show")
+	end
+
 	-- force add reveal_force_cwd.
 	if not vim.tbl_contains(arg_table.fargs, "reveal_force_cwd") then
 		table.insert(arg_table.fargs,  "reveal_force_cwd")
