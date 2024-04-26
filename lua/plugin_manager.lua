@@ -91,7 +91,7 @@ local plugins = {
 	-- hop.nvim. supplant easy-motion.
 	{
 		"smoka7/hop.nvim",
-		tag = "*",
+		version = "*",
 		opts = {},
 		config = function(plugin, opts)
 			require"hop".setup(opts)
