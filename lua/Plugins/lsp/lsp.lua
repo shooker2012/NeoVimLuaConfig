@@ -58,5 +58,6 @@ if lspconfig then
 		end
 
 		lspconfig[server].setup(opts)
+		lspconfig[server].config_cache = opts
 	end
 end
