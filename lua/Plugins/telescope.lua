@@ -13,8 +13,8 @@ local function c_f()
 	telescope.extensions.live_grep_args.live_grep_args()
 end
 
-vim.keymap.set({"n", "v"}, "<C-P>", c_p, keymap_opts)
-vim.keymap.set({"n", "v"}, "<C-F>", c_f, keymap_opts)
+vim.keymap.set({"n", "v"}, "<C-p>", c_p, keymap_opts)
+vim.keymap.set({"n", "v"}, "<C-f>", c_f, keymap_opts)
 
 local live_grep_args_shortcuts = require("telescope-live-grep-args.shortcuts")
 vim.keymap.set("n", "<F3>", function() live_grep_args_shortcuts.grep_word_under_cursor() end, keymap_opts)
@@ -57,56 +57,56 @@ telescope.setup{
     -- config_key = value,
     mappings = {
       i = {
-        ["<M-N>"] = actions.cycle_history_next,
-        ["<M-P>"] = actions.cycle_history_prev,
+        ["<M-n>"] = actions.cycle_history_next,
+        ["<M-p>"] = actions.cycle_history_prev,
 
-		["<C-F>"] = custom_actions.c_f,
-		["<C-P>"] = custom_actions.c_p,
+		["<C-f>"] = custom_actions.c_f,
+		["<C-p>"] = custom_actions.c_p,
 
-        ["<C-J>"] = actions.move_selection_next,
-        ["<C-K>"] = actions.move_selection_previous,
+        ["<C-j>"] = actions.move_selection_next,
+        ["<C-k>"] = actions.move_selection_previous,
 
-        ["<C-C>"] = actions.close,
+        ["<C-c>"] = actions.close,
 
         ["<Down>"] = actions.move_selection_next,
         ["<Up>"] = actions.move_selection_previous,
 
         ["<CR>"] = actions.select_default,
-        ["<C-S>"] = actions.select_horizontal,
-        ["<C-V>"] = actions.select_vertical,
-        ["<C-T>"] = actions.select_tab,
+        ["<C-s>"] = actions.select_horizontal,
+        ["<C-v>"] = actions.select_vertical,
+        ["<C-t>"] = actions.select_tab,
 
-        -- ["<C-U>"] = actions.preview_scrolling_up,
-        -- ["<C-D>"] = actions.preview_scrolling_down,
+        -- ["<C-u>"] = actions.preview_scrolling_up,
+        -- ["<C-d>"] = actions.preview_scrolling_down,
 
         ["<PageUp>"] = actions.results_scrolling_up,
         ["<PageDown>"] = actions.results_scrolling_down,
 
         ["<Tab>"] = actions.toggle_selection + actions.move_selection_worse,
         ["<S-Tab>"] = actions.toggle_selection + actions.move_selection_better,
-        ["<C-Q>"] = actions.send_to_qflist + actions.open_qflist,
-        ["<M-Q>"] = actions.send_selected_to_qflist + actions.open_qflist,
-        ["<C-L>"] = actions.complete_tag,
+        ["<C-q>"] = actions.send_to_qflist + actions.open_qflist,
+        ["<M-q>"] = actions.send_selected_to_qflist + actions.open_qflist,
+        ["<C-l>"] = actions.complete_tag,
         ["<C-_>"] = actions.which_key, -- keys from pressing <C-/>
 
-        ["<C-U>"] = custom_actions.clear_prompt,
+        ["<C-u>"] = custom_actions.clear_prompt,
       },
 
       n = {
-        ["<C-C>"] = actions.close,
-		["<C-F>"] = custom_actions.c_f,
-		["<C-P>"] = custom_actions.c_p,
+        ["<C-c>"] = actions.close,
+		["<C-f>"] = custom_actions.c_f,
+		["<C-p>"] = custom_actions.c_p,
 
         ["<esc>"] = actions.close,
         ["<CR>"] = actions.select_default,
-        ["<C-S>"] = actions.select_horizontal,
-        ["<C-V>"] = actions.select_vertical,
-        ["<C-T>"] = actions.select_tab,
+        ["<C-s>"] = actions.select_horizontal,
+        ["<C-v>"] = actions.select_vertical,
+        ["<C-t>"] = actions.select_tab,
 
         ["<Tab>"] = actions.toggle_selection + actions.move_selection_worse,
         ["<S-Tab>"] = actions.toggle_selection + actions.move_selection_better,
-        ["<C-Q>"] = actions.send_to_qflist + actions.open_qflist,
-        ["<M-Q>"] = actions.send_selected_to_qflist + actions.open_qflist,
+        ["<C-q>"] = actions.send_to_qflist + actions.open_qflist,
+        ["<M-q>"] = actions.send_selected_to_qflist + actions.open_qflist,
 
         ["j"] = actions.move_selection_next,
         ["k"] = actions.move_selection_previous,
@@ -119,8 +119,8 @@ telescope.setup{
         ["gg"] = actions.move_to_top,
         ["G"] = actions.move_to_bottom,
 
-        ["<C-U>"] = actions.preview_scrolling_up,
-        ["<C-D>"] = actions.preview_scrolling_down,
+        ["<C-u>"] = actions.preview_scrolling_up,
+        ["<C-d>"] = actions.preview_scrolling_down,
 
         ["<PageUp>"] = actions.results_scrolling_up,
         ["<PageDown>"] = actions.results_scrolling_down,
