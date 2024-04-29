@@ -59,7 +59,7 @@ local plugins = {
 	"hrsh7th/cmp-buffer",
 	"hrsh7th/cmp-path",
 	"hrsh7th/cmp-cmdline",
-	"saadparwaiz1/cmp_luasnip",
+	-- "saadparwaiz1/cmp_luasnip",
 	{
 		"hrsh7th/nvim-cmp",
 		config = function(plugin, opts)
@@ -215,6 +215,14 @@ local plugins = {
 		"shooker2012/sal-proj-lua",
 		config = function(plugins, opts)
 			require("sal-proj-lua")
+		end,
+	},
+
+	-- Sal-Custom-Macro
+	{
+		"shooker2012/sal-custom-macro",
+		config = function(plugins, opts)
+			require("sal-custom-macro")
 		end,
 	},
 
