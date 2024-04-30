@@ -29,6 +29,13 @@ local complete_func = function(arg_lead, cmd_line, cursor_pos)
 end
 
 vim.api.nvim_create_user_command('NT', function(arg_table)
+	local path = arg_table.fargs[1]
+	if path then
+		vim.cmd.edit(path)
+	end
+
+	vim.o.autochdir = false
+
 	local neotree_cmd = require("neo-tree.command")._command
 
 	-- force add show
@@ -42,7 +49,5 @@ vim.api.nvim_create_user_command('NT', function(arg_table)
 	end
 
 	neotree_cmd(unpack(arg_table.fargs))
-
-	vim.o.autochdir = false
 end, { nargs='*', complete=complete_func})
 
