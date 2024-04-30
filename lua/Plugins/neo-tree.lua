@@ -30,7 +30,7 @@ end
 
 vim.api.nvim_create_user_command('NT', function(arg_table)
 	local path = arg_table.fargs[1]
-	if path then
+	if path and vim.fn.filereadable(path) then
 		vim.cmd.edit(path)
 	end
 
@@ -39,7 +39,9 @@ vim.api.nvim_create_user_command('NT', function(arg_table)
 	local neotree_cmd = require("neo-tree.command")._command
 
 	-- force add show
-	if not vim.tbl_contains(arg_table.fargs, "show") then
+	if not vim.tbl_contains(arg_table.fargs, "show")
+		and not vim.tbl_contains(arg_table.fargs, "close")
+		and not vim.tbl_contains(arg_table.fargs, "focus") then
 		table.insert(arg_table.fargs,  "show")
 	end
 
