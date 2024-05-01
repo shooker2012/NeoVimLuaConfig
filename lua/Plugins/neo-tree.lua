@@ -30,11 +30,9 @@ end
 
 vim.api.nvim_create_user_command('NT', function(arg_table)
 	local path = arg_table.fargs[1]
-	if path and vim.fn.filereadable(path) then
+	if path and vim.fn.filereadable(path) > 0 then
 		vim.cmd.edit(path)
 	end
-
-	vim.o.autochdir = false
 
 	local neotree_cmd = require("neo-tree.command")._command
 
@@ -51,5 +49,7 @@ vim.api.nvim_create_user_command('NT', function(arg_table)
 	end
 
 	neotree_cmd(unpack(arg_table.fargs))
+
+	vim.o.autochdir = false
 end, { nargs='*', complete=complete_func})
 
