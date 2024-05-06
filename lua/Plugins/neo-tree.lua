@@ -53,3 +53,5 @@ vim.api.nvim_create_user_command('NT', function(arg_table)
 	vim.o.autochdir = false
 end, { nargs='*', complete=complete_func})
 
+-- neo-tree's diagnostics ui is too slow to large file.
+require("neo-tree").setup({enable_diagnostics = false})
