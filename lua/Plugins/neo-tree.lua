@@ -30,7 +30,7 @@ end
 
 vim.api.nvim_create_user_command('NT', function(arg_table)
 	local path = arg_table.fargs[1]
-	if path and vim.fn.filereadable(path) > 0 then
+	if path and vim.fn.filereadable(vim.fn.expand(path)) > 0 then
 		vim.cmd.edit(path)
 	end
 
