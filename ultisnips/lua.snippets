@@ -31,7 +31,7 @@ warn("~~~~~~~~~~log$1"$2)
 endsnippet
 
 
-snippet "logv (.*)" br
+snippet "logv (.*)\;" br
 warn( "~~~~~~~~~~log $1:", `!p
 
 text = match.group(1)
@@ -47,7 +47,7 @@ snip.rv = params
 ` $0)
 endsnippet
 
-snippet "lognil (.*)" br
+snippet "lognil (.*)\;" br
 -- [TEST_CODE]
 `!p
 pos = 0
