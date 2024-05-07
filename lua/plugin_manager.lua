@@ -195,7 +195,11 @@ local plugins = {
 		"stevearc/aerial.nvim",
 		config = function(plugins, opts)
 			local aerial = require("aerial")
-			aerial.setup()
+			aerial.setup({
+				layout = {
+					max_width = {0.4}
+				},
+			})
 
 			local config = require("aerial.config")
 			-- keymap
@@ -255,7 +259,7 @@ local plugins = {
 		dependencies = {
 			"inkarkat/vim-ingo-library",
 		},
-	}
+	},
 }
 
 -- ============================================================Vimscript Plugins Configs============================================================
