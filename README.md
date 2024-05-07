@@ -1,6 +1,6 @@
 # 依赖软件安装说明
 
-## ripgrep
+## ## ripgrep
 
 【依赖插件】 Telescope
 
@@ -10,7 +10,7 @@
 
 安装pc-windows-msvc.zip版本即可。
 
-## zig
+## ## zig
 
 【依赖插件】Treesitter
 
