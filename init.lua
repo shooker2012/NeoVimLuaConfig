@@ -52,3 +52,6 @@ vim.cmd('au BufNewFile,BufRead *.frag,*.vert,*.fp,*.vp,*.glsl,*.fsh,*.vsh setf g
 vim.cmd('au BufNewFile,BufRead *.hlsl,*.fx,*.fxh,*.vsh,*.psh,*.shader setf fx')
 
 require "plugin_manager"
+
+-- [Profile]
+require("sal_profile")

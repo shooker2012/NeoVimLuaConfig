@@ -255,7 +255,10 @@ local plugins = {
 		dependencies = {
 			"inkarkat/vim-ingo-library",
 		},
-	}
+	},
+
+	-- [Profile]
+	"stevearc/profile.nvim",
 }
 
 -- ============================================================Vimscript Plugins Configs============================================================
@@ -273,4 +276,3 @@ opts = nil
 require("lazy").setup(plugins, opts)
 
 require("Plugins.lsp.lsp")
-
