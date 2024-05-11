@@ -4,6 +4,8 @@
 local complete_func = function(arg_lead, cmd_line, cursor_pos)
 	cmd_line = cmd_line:gsub("^NT", "Neotree")
 	local condidate = {}
+
+	-- Add environment variables.
 	local env_map = vim.fn.environ()
 	if arg_lead:len() > 0 then
 		for k, v in pairs(env_map) do
@@ -18,6 +20,7 @@ local complete_func = function(arg_lead, cmd_line, cursor_pos)
 		end
 	end
 
+	-- Add default neotree complete.
 	local nt_args = require'neo-tree.command'.complete_args(arg_lead, cmd_line, cursor_pos)
 	for i, v in ipairs(vim.fn.split(nt_args, "\n")) do
 		if not vim.tbl_contains(condidate, v) then
@@ -29,18 +32,22 @@ local complete_func = function(arg_lead, cmd_line, cursor_pos)
 end
 
 vim.api.nvim_create_user_command('NT', function(arg_table)
-	local path = arg_table.fargs[1]
-	if path and vim.fn.filereadable(vim.fn.expand(path)) > 0 then
-		vim.cmd.edit(path)
-	end
+	local path = arg_table.fargs[1] and vim.fn.expand(arg_table.fargs[1])
 
-	local neotree_cmd = require("neo-tree.command")._command
-
-	-- force add show
-	if not vim.tbl_contains(arg_table.fargs, "show")
-		and not vim.tbl_contains(arg_table.fargs, "close")
-		and not vim.tbl_contains(arg_table.fargs, "focus") then
-		table.insert(arg_table.fargs,  "show")
+	local has_path = ( vim.fn.finddir(path) or vim.fn.findfile(path) ) ~= ""
+	if has_path then
+		-- force add show.
+		if not vim.tbl_contains(arg_table.fargs, "show")
+			and not vim.tbl_contains(arg_table.fargs, "close")
+			and not vim.tbl_contains(arg_table.fargs, "focus")
+			and not vim.tbl_contains(arg_table.fargs, "float") then
+			table.insert(arg_table.fargs,  "show")
+		end
+	else
+		-- force add toggle.
+		if not vim.tbl_contains(arg_table.fargs, "toggle") then
+			table.insert(arg_table.fargs, "toggle")
+		end
 	end
 
 	-- force add reveal_force_cwd.
@@ -48,8 +55,12 @@ vim.api.nvim_create_user_command('NT', function(arg_table)
 		table.insert(arg_table.fargs,  "reveal_force_cwd")
 	end
 
+	local neotree_cmd = require("neo-tree.command")._command
 	neotree_cmd(unpack(arg_table.fargs))
 
+	if path and vim.fn.filereadable(path) > 0 then
+		vim.cmd.edit(path)
+	end
 	vim.o.autochdir = false
 end, { nargs='*', complete=complete_func})
 
