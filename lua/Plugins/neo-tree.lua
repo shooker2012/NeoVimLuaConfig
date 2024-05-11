@@ -33,21 +33,10 @@ end
 
 vim.api.nvim_create_user_command('NT', function(arg_table)
 	local path = arg_table.fargs[1] and vim.fn.expand(arg_table.fargs[1])
-
-	local has_path = ( vim.fn.finddir(path) or vim.fn.findfile(path) ) ~= ""
-	if has_path then
-		-- force add show.
-		if not vim.tbl_contains(arg_table.fargs, "show")
-			and not vim.tbl_contains(arg_table.fargs, "close")
-			and not vim.tbl_contains(arg_table.fargs, "focus")
-			and not vim.tbl_contains(arg_table.fargs, "float") then
-			table.insert(arg_table.fargs,  "show")
-		end
-	else
-		-- force add toggle.
-		if not vim.tbl_contains(arg_table.fargs, "toggle") then
-			table.insert(arg_table.fargs, "toggle")
-		end
+	-- local has_path = ( vim.fn.finddir(path) or vim.fn.findfile(path) ) ~= ""
+	
+	if #arg_table.fargs == 0 then
+		table.insert(arg_table.fargs, "toggle")
 	end
 
 	-- force add reveal_force_cwd.
