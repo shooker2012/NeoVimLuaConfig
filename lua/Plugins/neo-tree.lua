@@ -34,6 +34,9 @@ end
 vim.api.nvim_create_user_command('NT', function(arg_table)
 	local path = arg_table.fargs[1] and vim.fn.expand(arg_table.fargs[1])
 	-- local has_path = ( vim.fn.finddir(path) or vim.fn.findfile(path) ) ~= ""
+	if path and vim.fn.filereadable(path) > 0 then
+		vim.cmd.edit(path)
+	end
 	
 	if #arg_table.fargs == 0 then
 		table.insert(arg_table.fargs, "toggle")
@@ -47,9 +50,6 @@ vim.api.nvim_create_user_command('NT', function(arg_table)
 	local neotree_cmd = require("neo-tree.command")._command
 	neotree_cmd(unpack(arg_table.fargs))
 
-	if path and vim.fn.filereadable(path) > 0 then
-		vim.cmd.edit(path)
-	end
 	vim.o.autochdir = false
 end, { nargs='*', complete=complete_func})
 
