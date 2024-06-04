@@ -199,6 +199,9 @@ local plugins = {
 				layout = {
 					max_width = {0.4}
 				},
+				
+				-- Disable aerial on fiels with this many lines.
+				disable_max_lines = 50000,
 			})
 
 			local config = require("aerial.config")
