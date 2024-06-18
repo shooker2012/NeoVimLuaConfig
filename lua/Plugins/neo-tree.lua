@@ -54,14 +54,16 @@ vim.api.nvim_create_user_command('NT', function(arg_table)
 end, { nargs='*', complete=complete_func})
 
 -- neo-tree's diagnostics ui is too slow to large file.
-require("neo-tree").setup({enable_diagnostics = false})
-
 require("neo-tree").setup({
+	enable_diagnostics = false,
+
 	window = {
 		mappings = {
 			["z"] = "", -- Disable default "z" map so that can use "zz", "zb", and "zt"
 			["zo"] = "expand_all_nodes",
 			["zc"] = "close_all_nodes",
+
+			["/"] = "", -- Disable "/"
 		}
 	},
 })
