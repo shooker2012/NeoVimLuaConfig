@@ -38,9 +38,9 @@ vim.api.nvim_create_user_command('NT', function(arg_table)
 		vim.cmd.edit(path)
 	end
 	
-	if #arg_table.fargs == 0 then
-		table.insert(arg_table.fargs, "toggle")
-	end
+	-- if #arg_table.fargs == 0 then
+	-- 	table.insert(arg_table.fargs, "toggle")
+	-- end
 
 	-- force add reveal_force_cwd.
 	if not vim.tbl_contains(arg_table.fargs, "reveal_force_cwd") then
