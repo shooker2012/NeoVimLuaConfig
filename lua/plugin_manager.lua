@@ -157,6 +157,7 @@ local plugins = {
 	{
 		"nvim-telescope/telescope.nvim",
 
+		opts = { rocks = {enabled = false}},
 		dependencies = {
 			{ 
 				"nvim-telescope/telescope-live-grep-args.nvim" ,
@@ -278,7 +279,7 @@ nnoremap <silent> <C-l> :<C-u>nohlsearch<CR>:<C-u>MarkClear<CR><C-l>
 nnoremap <silent> <C-k> :<C-u>Mark<CR>
 ]])
 
-opts = nil
+opts = { rocks = { enabled = false } }
 
 require("lazy").setup(plugins, opts)
 
