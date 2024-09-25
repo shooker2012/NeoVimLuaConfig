@@ -12,9 +12,16 @@ end
 local function c_f()
 	telescope.extensions.live_grep_args.live_grep_args()
 end
+local function c_b()
+	local opts = require('telescope.themes').get_dropdown({ previewer = false })
+	opts.show_all_buffers = false
+	opts.sort_mru = true
+	require'telescope.builtin'.buffers(opts)
+end
 
 vim.keymap.set({"n", "v"}, "<C-p>", c_p, keymap_opts)
 vim.keymap.set({"n", "v"}, "<C-f>", c_f, keymap_opts)
+vim.keymap.set({"n", "v"}, "<C-b>", c_b, keymap_opts)
 
 local live_grep_args_shortcuts = require("telescope-live-grep-args.shortcuts")
 vim.keymap.set("n", "<F3>", function() live_grep_args_shortcuts.grep_word_under_cursor() end, keymap_opts)
@@ -51,6 +58,30 @@ custom_actions.c_p = function(prompt_bufnr)
 	require'telescope.builtin'.find_files(opts)
 end
 
+custom_actions.c_b = function(prompt_bufnr)
+	local current_picker = action_state.get_current_picker(prompt_bufnr) -- picker state
+	local prompt = current_picker:_get_prompt()
+
+	local opts = require('telescope.themes').get_dropdown({ previewer = false })
+	opts.show_all_buffers = false
+	opts.sort_mru = true
+	opts.default_text = prompt
+	require'telescope.builtin'.buffers(opts)
+end
+
+custom_actions.c_cr = function(prompt_bufnr)
+	local current_picker = action_state.get_current_picker(prompt_bufnr) -- picker state
+	if current_picker.prompt_title == "Buffers" then
+		local entry = action_state.get_selected_entry()
+
+		if entry then
+			vim.cmd.drop(entry.filename)
+		end
+	else
+		actions.select_default(prompt_bufnr)
+	end
+end
+
 telescope.setup{
   defaults = {
     -- Default configuration for telescope goes here:
@@ -62,6 +93,7 @@ telescope.setup{
 
 		["<C-f>"] = custom_actions.c_f,
 		["<C-p>"] = custom_actions.c_p,
+		["<C-b>"] = custom_actions.c_b,
 
         ["<C-j>"] = actions.move_selection_next,
         ["<C-k>"] = actions.move_selection_previous,
@@ -71,7 +103,7 @@ telescope.setup{
         ["<Down>"] = actions.move_selection_next,
         ["<Up>"] = actions.move_selection_previous,
 
-        ["<CR>"] = actions.select_default,
+        ["<CR>"] = custom_actions.c_cr,
         ["<C-s>"] = actions.select_horizontal,
         ["<C-v>"] = actions.select_vertical,
         ["<C-t>"] = actions.select_tab,
@@ -96,9 +128,10 @@ telescope.setup{
         ["<C-c>"] = actions.close,
 		["<C-f>"] = custom_actions.c_f,
 		["<C-p>"] = custom_actions.c_p,
+		["<C-b>"] = custom_actions.c_b,
 
         ["<esc>"] = actions.close,
-        ["<CR>"] = actions.select_default,
+        ["<CR>"] = custom_actions.c_cr,
         ["<C-s>"] = actions.select_horizontal,
         ["<C-v>"] = actions.select_vertical,
         ["<C-t>"] = actions.select_tab,
