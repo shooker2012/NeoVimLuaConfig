@@ -14,7 +14,6 @@ vim.opt.shiftwidth = 4
 
 vim.opt.fileencoding = "utf-8"
 vim.opt.encoding = "utf-8"
-vim.opt.termencoding = "utf-8"
 vim.opt.fileencodings = {"utf-8","cp936","ucs-bom","shift-jis","latin1","big5","gb18030","gbk","gb2312"}
 
 vim.opt.guifont="Consolas:h11"
