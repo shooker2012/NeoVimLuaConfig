@@ -15,7 +15,14 @@ end
 local function c_b()
 	local opts = require('telescope.themes').get_dropdown({ previewer = false })
 	opts.show_all_buffers = false
-	opts.sort_mru = true
+	-- opts.sort_mru = true
+	opts.sort_buffers = function(a, b)
+		local info_a = vim.fn.getbufinfo(a)[1]
+		local info_b = vim.fn.getbufinfo(b)[1]
+
+		if info_a.hidden < info_b.hidden then return true end
+		return info_a.lastused > info_b.lastused
+	end
 	require'telescope.builtin'.buffers(opts)
 end
 
