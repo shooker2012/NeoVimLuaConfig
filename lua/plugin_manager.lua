@@ -256,6 +256,7 @@ local plugins = {
 	-- ============================================================Vimscript Plugins============================================================
 	"godlygeek/tabular",    -- Tabular
 	"tommcdo/vim-exchange", -- vim exchange
+	"tpope/vim-abolish",    -- vim abolish
 
 	-- vim mark
 	{
