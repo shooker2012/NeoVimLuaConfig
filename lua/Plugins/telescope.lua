@@ -82,7 +82,12 @@ custom_actions.c_cr = function(prompt_bufnr)
 		local entry = action_state.get_selected_entry()
 
 		if entry then
-			vim.cmd.drop(entry.filename)
+			local info = vim.fn.getbufinfo(entry.bufnr)[1]
+			if info and info.hidden == 0 and info.name ~= "" then
+				vim.cmd.drop(entry.filename)
+			else
+				actions.select_default(prompt_bufnr)
+			end
 		end
 	else
 		actions.select_default(prompt_bufnr)
