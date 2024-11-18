@@ -21,7 +21,11 @@ local function c_b()
 		local info_b = vim.fn.getbufinfo(b)[1]
 
 		if info_a.hidden < info_b.hidden then return true end
-		return info_a.lastused > info_b.lastused
+		if info_a.lastused ~= info_b.lastused then 
+			return info_a.lastused > info_b.lastused 
+		end
+
+		return a > b
 	end
 	require'telescope.builtin'.buffers(opts)
 end
