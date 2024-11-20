@@ -86,11 +86,13 @@ cmp.setup({
 	sources = {
 		-- { name = 'luasnip' },
 		{ name = 'ultisnips' },
+		-- { name = 'nvim_lsp', max_item_count = 5 },
 		{ name = 'nvim_lsp' },
 		{ name = "nvim_lua" },
+		{ name = "copilot" },
+		-- { name = "copilot", group_index = 2 },
 		{ name = 'path', group_index = 2 },
 		{ name = 'buffer', group_index = 2 },
-		{ name = "copilot", group_index = 2 },
 	},
 
 	formatting = {
