@@ -136,3 +136,31 @@ end
 
 vim.api.nvim_create_user_command("SetDiagnosticSeverity", SetDiagnosticSeverity, 
 	{nargs=1, complete=complete_func})
+
+local VimGrepInQuickFix = function(arg_table)
+	local pattern = arg_table.args
+	if not pattern or pattern == "" then
+		return
+	end
+
+	local file_string = ""
+	for i, v in ipairs(vim.fn.getqflist()) do
+		local file_name = vim.fn.bufname(v.bufnr)
+
+		if file_string == "" then
+			file_string = file_name
+		else
+			file_string = file_string.." "..file_name
+		end
+	end
+
+	if file_string == "" then
+		return
+	end
+
+	-- print(file_string)
+	local cmd = string.format("vimgrep %s %s", pattern, file_string)
+	-- print(cmd)
+	vim.cmd(cmd)
+end
+vim.api.nvim_create_user_command("VimInQ", VimGrepInQuickFix, { nargs='*' })
