@@ -100,6 +100,14 @@ local plugins = {
 				require("hop").hint_char2()
 			end, {remap=true})
 		end,
+
+		--[[修改代码：使jump时永远ignore case.
+		--hop.nvim\lua\hop\jump_regex.lua
+		-- function M.regex_by_case_searching(pat, plain_search, opts)
+		--	-    if vim.o.smartcase and not starts_with_uppercase(pat) then
+		--	+    if not starts_with_uppercase(pat) then
+		-- 
+		--]]
 	},
 
 	-- Comment
