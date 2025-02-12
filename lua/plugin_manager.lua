@@ -249,7 +249,24 @@ local plugins = {
 		event = "InsertEnter",
 		config = function()
 			require("copilot").setup({
-				suggestion = { enabled = false },
+				-- suggestion = { enabled = false },
+
+				-- use default
+				-- suggestion = {
+				-- 	enabled = true,
+				-- 	auto_trigger = true,
+				-- 	hide_during_completion = true,
+				-- 	debounce = 75,
+				-- 	keymap = {
+				-- 		accept = "<M-l>",
+				-- 		accept_word = false,
+				-- 		accept_line = false,
+				-- 		next = "<M-]>",
+				-- 		prev = "<M-[>",
+				-- 		dismiss = "<C-]>",
+				-- 	},
+				-- },
+
 				panel = { enabled = false },
 			})
 		end,
@@ -258,6 +275,27 @@ local plugins = {
 		"zbirenbaum/copilot-cmp",
 		config = function ()
 			require("copilot_cmp").setup()
+		end
+
+	},
+	-- Copilot chat,
+	{
+		"CopilotC-Nvim/CopilotChat.nvim",
+		opts = {
+			-- See Configuration section for options
+			prompts = {
+				DebugRunPath = {
+					-- prompt = 'warning all run path and relevant value with prefix "~~~~~~~~~~debug: "',
+					prompt = '在所有执行路径中添加 `warn()` 函数作为 debug log。在分支路径前输出决定分支的变量及其表达式，前缀为 "\\~\\~\\~\\~\\~\\~\\~\\~\\~\\~debug: [%相关环境名%] "，并且在前缀后加入与分支代码层级相应的缩进。这有助于在调试时更清晰地了解代码的执行路径和变量的状态。一个分支所有的变量，应该在一行log中。',
+					-- system_prompt = 'You are very good at explaining stuff',
+					-- mapping = '<leader>ccmc',
+					-- description = 'My custom prompt description',
+				},
+			},
+		},
+		config = function(plugins, opts)
+			require("CopilotChat").setup(opts)
+			vim.cmd.cnoreabbrev("CC CopilotChat")
 		end
 	},
 
