@@ -20,7 +20,10 @@ local function c_b()
 		local info_a = vim.fn.getbufinfo(a)[1]
 		local info_b = vim.fn.getbufinfo(b)[1]
 
-		if info_a.hidden < info_b.hidden then return true end
+		if info_a.hidden ~= info_b.hidden then
+			return info_a.hidden < info_b.hidden
+		end
+
 		if info_a.lastused ~= info_b.lastused then 
 			return info_a.lastused > info_b.lastused 
 		end
