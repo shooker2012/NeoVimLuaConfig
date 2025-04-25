@@ -30,7 +30,7 @@
 
 【依赖插件】 Telescope
 
-### ### 安装
+#### 安装
 
 [Releases · BurntSushi/ripgrep (github.com)](https://github.com/BurntSushi/ripgrep/releases)
 
@@ -40,7 +40,7 @@
 
 【依赖插件】Treesitter
 
-### ### 安装
+#### 安装
 
 [Download ⚡ Zig Programming Language (ziglang.org)](https://ziglang.org/download/)
 
