@@ -42,6 +42,13 @@ M.setup = function()
 	vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, {
 		border = "rounded",
 	})
+
+	-- Config on_attach and capabilities.
+	local opts = {
+		on_attach = M.on_attach,
+		capabilities = M.capabilities,
+	}
+	vim.lsp.config("*", opts)
 end
 
 local function lsp_highlight_document(client)
