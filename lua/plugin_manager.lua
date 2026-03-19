@@ -91,8 +91,10 @@ local plugins = {
 	-- hop.nvim. supplant easy-motion.
 	{
 		"smoka7/hop.nvim",
-		version = "*",
-		opts = {},
+		-- version = "*",
+		opts = {
+			case_insensitive = true
+		},
 		config = function(plugin, opts)
 			require"hop".setup(opts)
 
@@ -193,7 +195,26 @@ local plugins = {
 	},
 
 	-- Treesitter Extentions
-	"nvim-treesitter/nvim-treesitter-textobjects",
+	-- "nvim-treesitter/nvim-treesitter-textobjects",
+	{
+		"nvim-treesitter/nvim-treesitter-textobjects",
+		branch = "main",
+		init = function()
+			-- Disable entire built-in ftplugin mappings to avoid conflicts.
+			-- See https://github.com/neovim/neovim/tree/master/runtime/ftplugin for built-in ftplugins.
+			vim.g.no_plugin_maps = true
+
+			-- Or, disable per filetype (add as you like)
+			-- vim.g.no_python_maps = true
+			-- vim.g.no_ruby_maps = true
+			-- vim.g.no_rust_maps = true
+			-- vim.g.no_go_maps = true
+		end,
+		config = function()
+			-- put your config here
+		end,
+	},
+
 	"nvim-treesitter/nvim-treesitter-context",
 
 	-- vim-matchup
