@@ -1,6 +1,5 @@
 local status_ok, mason = pcall(require, "mason")
 local status_ok, mason_lspconfig = pcall(require, "mason-lspconfig")
-local status_ok, lspconfig = pcall(require, "lspconfig")
 
 
 --[[
@@ -39,25 +38,21 @@ function file_exists(name)
 	return f ~= nil and io.close(f)
 end
 
-if lspconfig then
-	-- All installed servers. Can custom opts by create optional file "Plugins/lsp/settings/[server_name].lua".
+-- All installed servers. Can custom opts by create optional file "Plugins/lsp/settings/[server_name].lua".
 
-	for _, server in pairs(default_servers) do
-		local opts = {
-			on_attach = handlers.on_attach,
-			capabilities = handlers.capabilities,
-		}
+for _, server in pairs(default_servers) do
+	local opts = {
+		on_attach = handlers.on_attach,
+		capabilities = handlers.capabilities,
+	}
 
-		server = vim.split(server, "@")[1]
+	server = vim.split(server, "@")[1]
 
-		local file_name = "Plugins.lsp.settings." .. server
+	local file_name = "Plugins.lsp.settings." .. server
 
-		if file_exists(file_name) then
-			local conf_opts = require(file_name)
-			opts = vim.tbl_deep_extend("force", conf_opts, opts)
-		end
-
-		lspconfig[server].setup(opts)
-		lspconfig[server].config_cache = opts
+	if file_exists(file_name) then
+		local conf_opts = require(file_name)
+		opts = vim.tbl_deep_extend("force", conf_opts, opts)
 	end
+	vim.lsp.config(server, opts)
 end
