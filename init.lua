@@ -30,6 +30,8 @@ vim.opt.autochdir = true
 
 vim.opt.foldenable = false
 
+vim.opt.shortmess:append("c")
+
 --[[ Use neovide instead of the under codes.
 -- Autoreolad when file changed.
 vim.o.autoread = true
