@@ -1,6 +1,11 @@
 local M = {}
 
 M.setup = function()
+	-- Keep rounded borders as the preferred UI style. Border alignment depends
+	-- on the terminal host's glyph measurement; verification uses the user's
+	-- normal Windows Terminal profile instead of a separately spawned conhost.
+	vim.o.winborder = "rounded"
+
 	-- local signs = {
 	--	 { name = "DiagnosticSignError", text = "" },
 	--	 { name = "DiagnosticSignWarn", text = "" },
@@ -23,8 +28,7 @@ M.setup = function()
 		float = {
 			focusable = false,
 			style = "minimal",
-			border = "double",
-			source = "always",
+			source = true,
 			header = "",
 			prefix = "",
 		},
@@ -35,14 +39,6 @@ M.setup = function()
 
 	vim.diagnostic.config(config)
 
-	vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
-		border = "rounded",
-	})
-
-	vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, {
-		border = "rounded",
-	})
-
 	-- Config on_attach and capabilities.
 	local opts = {
 		on_attach = M.on_attach,
@@ -51,19 +47,20 @@ M.setup = function()
 	vim.lsp.config("*", opts)
 end
 
-local function lsp_highlight_document(client)
+local function lsp_highlight_document(client, bufnr)
 	-- Set autocommands conditional on server_capabilities
-	if client.server_capabilities.documentHighlight then
-		vim.api.nvim_exec(
-		[[
-		augroup lsp_document_highlight
-		autocmd! * <buffer>
-		autocmd CursorHold <buffer> lua vim.lsp.buf.document_highlight()
-		autocmd CursorMoved <buffer> lua vim.lsp.buf.clear_references()
-		augroup END
-		]],
-		false
-		)
+	if client.server_capabilities.documentHighlightProvider then
+		local group = vim.api.nvim_create_augroup("sal_lsp_document_highlight_" .. bufnr, { clear = true })
+		vim.api.nvim_create_autocmd("CursorHold", {
+			group = group,
+			buffer = bufnr,
+			callback = vim.lsp.buf.document_highlight,
+		})
+		vim.api.nvim_create_autocmd("CursorMoved", {
+			group = group,
+			buffer = bufnr,
+			callback = vim.lsp.buf.clear_references,
+		})
 	end
 end
 
@@ -78,20 +75,52 @@ local function lsp_keymaps(bufnr)
 	vim.api.nvim_buf_set_keymap(bufnr, "n", "gr", "<cmd>lua vim.lsp.buf.references()<CR>", opts)
 	-- vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>ca", "<cmd>lua vim.lsp.buf.code_action()<CR>", opts)
 	-- vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>f", "<cmd>lua vim.diagnostic.open_float()<CR>", opts)
-	vim.cmd [[ command! Format execute 'lua vim.lsp.buf.formatting()' ]]
 end
 
 M.on_attach = function(client, bufnr)
-	if client.name == "tsserver" then
+	if client.name == "ts_ls" then
 		client.server_capabilities.documentFormattingProvider = false
 	end
 	lsp_keymaps(bufnr)
-	lsp_highlight_document(client)
+	lsp_highlight_document(client, bufnr)
 end
 
-local status_ok, cmp_nvim_lsp = pcall(require, "cmp_nvim_lsp")
-if status_ok then
-	M.capabilities = cmp_nvim_lsp.default_capabilities()
-end
+M.capabilities = vim.tbl_deep_extend("force", vim.lsp.protocol.make_client_capabilities(), {
+	textDocument = {
+		completion = {
+			dynamicRegistration = false,
+			completionItem = {
+				snippetSupport = true,
+				commitCharactersSupport = true,
+				deprecatedSupport = true,
+				preselectSupport = true,
+				tagSupport = { valueSet = { 1 } },
+				insertReplaceSupport = true,
+				resolveSupport = {
+					properties = {
+						"documentation",
+						"additionalTextEdits",
+						"insertTextFormat",
+						"insertTextMode",
+						"command",
+					},
+				},
+				insertTextModeSupport = { valueSet = { 1, 2 } },
+				labelDetailsSupport = true,
+			},
+			contextSupport = true,
+			insertTextMode = 1,
+			completionList = {
+				itemDefaults = {
+					"commitCharacters",
+					"editRange",
+					"insertTextFormat",
+					"insertTextMode",
+					"data",
+				},
+			},
+		},
+	},
+})
 
 return M

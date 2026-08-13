@@ -44,13 +44,30 @@ vim.api.nvim_create_autocmd({ "BufEnter", "CursorHold", "CursorHoldI", "FocusGai
 -- Use this global value to control diagnostic goto_[prev/next] and underline.
 _G.sal_diagnostic_severity = vim.diagnostic.severity.WARN
 
+vim.filetype.add({
+	extension = {
+		frag = "glsl",
+		vert = "glsl",
+		fp = "glsl",
+		vp = "glsl",
+		glsl = "glsl",
+		-- Intentional overrides: fsh is treated as GLSL and vsh as GLSL rather
+		-- than Neovim's built-in fsh and V-language detections.
+		fsh = "glsl",
+		vsh = "glsl",
+		hlsl = "hlsl",
+		fx = "hlsl",
+		fxh = "hlsl",
+		-- Intentional overrides: psh has no built-in owner and shader is HLSL
+		-- for this configuration rather than Godot's gdshader filetype.
+		psh = "hlsl",
+		shader = "hlsl",
+	},
+})
+
 require "keymaps"
 
 require "user_command"
-
--- set syntax rules for glsl and hlsl
-vim.cmd('au BufNewFile,BufRead *.frag,*.vert,*.fp,*.vp,*.glsl,*.fsh,*.vsh setf glsl')
-vim.cmd('au BufNewFile,BufRead *.hlsl,*.fx,*.fxh,*.vsh,*.psh,*.shader setf fx')
 
 require "plugin_manager"
 

@@ -1,0 +1,3 @@
+schema: spec-driven
+created: 2026-07-31
+goal: 恢复 treesitter 能力，清理废弃 API 和死依赖，并在保持现有行为的前提下降低启动耗时。

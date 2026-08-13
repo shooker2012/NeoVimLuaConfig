@@ -1,0 +1,20 @@
+schema: spec-driven
+
+context: |
+  项目是 Windows 上的个人 Neovim 配置，目标运行版本为 Neovim 0.11.x。
+  配置语言为 Lua，插件由 lazy.nvim 管理，LSP 使用 Neovim 原生 lsp/ 配置布局。
+  默认使用简体中文编写规划文档；代码、命令、路径和标识符保持原样。
+  改造必须保持既有按键和命令语义，外部依赖缺失时应给出可读提示但不得阻塞启动。
+  启动性能测量在同一机器重复执行并取稳定值，200ms 是尽力目标而非牺牲功能的硬门槛。
+
+rules:
+  proposal:
+    - 明确列出有意的行为变化和外部依赖。
+  specs:
+    - 保留 Kiro 来源需求的 R 编号，便于任务和验证脚本追踪。
+    - 每条验收条件都转换为独立的 WHEN/THEN scenario。
+  design:
+    - 记录失败处理、回滚策略和懒加载对按键模式的影响。
+  tasks:
+    - 每个可执行任务使用 OpenSpec 可追踪的 checkbox 格式。
+    - 阶段 checkpoint 必须包含自动化验证与必要的人工回归检查。

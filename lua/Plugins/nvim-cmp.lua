@@ -1,5 +1,6 @@
+local unpack = unpack or table.unpack
+
 local has_words_before = function()
-	unpack = unpack or table.unpack
 	local line, col = unpack(vim.api.nvim_win_get_cursor(0))
 	return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
 end
@@ -89,8 +90,6 @@ cmp.setup({
 		-- { name = 'nvim_lsp', max_item_count = 5 },
 		{ name = 'nvim_lsp' },
 		{ name = "nvim_lua" },
-		{ name = "copilot" },
-		-- { name = "copilot", group_index = 2 },
 		{ name = 'path', group_index = 2 },
 		{ name = 'buffer', group_index = 2 },
 	},
@@ -108,7 +107,6 @@ cmp.setup({
 			nvim_lua = "[NVIM_LUA]",
 			buffer = "[Buffer]",
 			path = "[Path]",
-			copilot = "[CO]",
 		  })[entry.source.name]
 		  return vim_item
 		end,
@@ -135,4 +133,28 @@ cmp.setup({
 		end
 	},
 	-- ... Your other configuration ...
+})
+
+local cmdline_mapping = cmp.mapping.preset.cmdline()
+
+cmp.setup.cmdline({ "/", "?" }, {
+	mapping = cmdline_mapping,
+	sources = {
+		{ name = "buffer" },
+	},
+	experimental = {
+		native_menu = false,
+	},
+})
+
+cmp.setup.cmdline(":", {
+	mapping = cmdline_mapping,
+	sources = cmp.config.sources({
+		{ name = "path" },
+	}, {
+		{ name = "cmdline" },
+	}),
+	experimental = {
+		native_menu = false,
+	},
 })

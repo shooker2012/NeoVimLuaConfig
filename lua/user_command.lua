@@ -105,7 +105,7 @@ endfunction
 ]])
 
 -- Set diagnostic severity
-function SetDiagnosticSeverity(arg_table)
+local function SetDiagnosticSeverity(arg_table)
 	-- Try get value.
 	local get_func = loadstring("return "..arg_table.args)
 	local s = get_func and get_func()

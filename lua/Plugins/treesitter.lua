@@ -1,124 +1,107 @@
-local status_ok, treesitter = pcall(require, "nvim-treesitter")
-if not treesitter then return end
+local M = {}
 
-treesitter.setup {
-	-- A list of parser names, or "all" (the five listed parsers should always be installed)
-	ensure_installed = { "c", "cpp", "rust", "lua", "vim", "vimdoc", },
-
-	-- Install parsers synchronously (only applied to `ensure_installed`)
-	sync_install = false,
-
-	-- Automatically install missing parsers when entering buffer
-	-- Recommendation: set to false if you don't have `tree-sitter` CLI installed locally
-	auto_install = true,
-
-	-- List of parsers to ignore installing (or "all")
-	ignore_install = { "javascript" },
-
-	---- If you need to change the installation directory of the parsers (see -> Advanced Setup)
-	-- parser_install_dir = "/some/path/to/store/parsers", -- Remember to run vim.opt.runtimepath:append("/some/path/to/store/parsers")!
-
-	highlight = {
-		enable = true,
-
-		-- -- NOTE: these are the names of the parsers and not the filetype. (for example if you want to
-		-- -- disable highlighting for the `tex` filetype, you need to include `latex` in this list as this is
-		-- -- the name of the parser)
-		-- -- list of language that will be disabled
-		-- disable = { "c", "rust" },
-		-- -- Or use a function for more flexibility, e.g. to disable slow treesitter highlight for large files
-		-- disable = function(lang, buf)
-		--     local max_filesize = 100 * 1024 -- 100 KB
-		--     local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
-		--     if ok and stats and stats.size > max_filesize then
-		--         return true
-		--     end
-		-- end,
-
-		-- Setting this to true will run `:h syntax` and tree-sitter at the same time.
-		-- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
-		-- Using this option may slow down your editor, and you may see some duplicate highlights.
-		-- Instead of true it can also be a list of languages
-		additional_vim_regex_highlighting = false,
-	},
-
-	-- indent = {
-	-- 	enable = true,
-	-- },
-
-
-
-	-- vim-matchup
-	matchup = {
-		enable = true,              -- mandatory, false will disable the whole extension
-		disable = { "c", "ruby" },  -- optional, list of language that will be disabled
-		-- [options]
-	},
+-- Parser dependencies (c for glsl, cpp for hlsl) are resolved by
+-- nvim-treesitter when the requested languages are normalized.
+M.languages = {
+	"c",
+	"cpp",
+	"lua",
+	"rust",
+	"python",
+	"vim",
+	"vimdoc",
+	"query",
+	"glsl",
+	"hlsl",
+	"markdown",
+	"markdown_inline",
+	"json",
+	"bash",
 }
 
--- nvim-treesitter-textobjects configs
-require("nvim-treesitter-textobjects").setup {
-	select = {
-		enable = true,
-
-		-- Automatically jump forward to textobj, similar to targets.vim
-		lookahead = true,
-
-		keymaps = {
-			-- You can use the capture groups defined in textobjects.scm
-			["af"] = "@function.outer",
-			["if"] = "@function.inner",
-			["ac"] = "@class.outer",
-			-- You can optionally set descriptions to the mappings (used in the desc parameter of
-			-- nvim_buf_set_keymap) which plugins like which-key display
-			["ic"] = { query = "@class.inner", desc = "Select inner part of a class region" },
-			-- You can also use captures from other query groups like `locals.scm`
-			["as"] = { query = "@scope", query_group = "locals", desc = "Select language scope" },
-		},
-		-- You can choose the select mode (default is charwise 'v')
-		--
-		-- Can also be a function which gets passed a table with the keys
-		-- * query_string: eg '@function.inner'
-		-- * method: eg 'v' or 'o'
-		-- and should return the mode ('v', 'V', or '<c-v>') or a table
-		-- mapping query_strings to modes.
-		-- selection_modes = {
-		-- 	['@parameter.outer'] = 'v', -- charwise
-		-- 	['@function.outer'] = 'V', -- linewise
-		-- 	-- ['@class.outer'] = '<c-v>', -- blockwise
-		-- },
-		-- -- If you set this to `true` (default is `false`) then any textobject is
-		-- -- extended to include preceding or succeeding whitespace. Succeeding
-		-- -- whitespace has priority in order to act similarly to eg the built-in
-		-- -- `ap`.
-		-- --
-		-- -- Can also be a function which gets passed a table with the keys
-		-- -- * query_string: eg '@function.inner'
-		-- -- * selection_mode: eg 'v'
-		-- -- and should return true of false
-		include_surrounding_whitespace = false,
-	},
+-- Filetypes that map to parsers supplied by the language list above.
+M.filetypes = {
+	"c",
+	"cpp",
+	"lua",
+	"rust",
+	"python",
+	"vim",
+	"help",
+	"query",
+	"glsl",
+	"hlsl",
+	"markdown",
+	"json",
+	"sh",
+	"bash",
 }
 
--- keymaps
--- You can use the capture groups defined in `textobjects.scm`
-vim.keymap.set({ "x", "o" }, "af", function()
-  require "nvim-treesitter-textobjects.select".select_textobject("@function.outer", "textobjects")
-end)
-vim.keymap.set({ "x", "o" }, "if", function()
-  require "nvim-treesitter-textobjects.select".select_textobject("@function.inner", "textobjects")
-end)
-vim.keymap.set({ "x", "o" }, "ac", function()
-  require "nvim-treesitter-textobjects.select".select_textobject("@class.outer", "textobjects")
-end)
-vim.keymap.set({ "x", "o" }, "ic", function()
-  require "nvim-treesitter-textobjects.select".select_textobject("@class.inner", "textobjects")
-end)
--- You can also use captures from other query groups like `locals.scm`
-vim.keymap.set({ "x", "o" }, "as", function()
-  require "nvim-treesitter-textobjects.select".select_textobject("@local.scope", "locals")
-end)
+function M.install_async()
+	-- Headless verification must never download or compile parsers.
+	if #vim.api.nvim_list_uis() == 0 then
+		return
+	end
 
--- use treessiter folder.
-vim.o.foldmethod = "expr"
-vim.o.foldexpr = "nvim_treesitter#foldexpr()"
+	if vim.fn.executable("tree-sitter") == 0 then
+		vim.schedule(function()
+			vim.notify(
+				"tree-sitter CLI not found; parsers cannot be installed.\n"
+					.. "Install with: npm install -g tree-sitter-cli",
+				vim.log.levels.WARN
+			)
+		end)
+		return
+	end
+
+	local config = require("nvim-treesitter.config")
+	local installed = config.get_installed("parsers")
+	local missing = vim.tbl_filter(function(language)
+		return not vim.list_contains(installed, language)
+	end, M.languages)
+
+	if #missing == 0 then
+		return
+	end
+
+	vim.schedule(function()
+		require("nvim-treesitter").install(missing, { summary = true })
+	end)
+end
+
+function M.attach_autocmd()
+	local group = vim.api.nvim_create_augroup("sal_treesitter", { clear = true })
+
+	vim.api.nvim_create_autocmd("FileType", {
+		group = group,
+		pattern = M.filetypes,
+		callback = function(args)
+			local language = vim.treesitter.language.get_lang(args.match)
+			if not language or not pcall(vim.treesitter.language.add, language) then
+				return
+			end
+
+			if not pcall(vim.treesitter.start, args.buf, language) then
+				return
+			end
+			vim.wo[0][0].foldmethod = "expr"
+			vim.wo[0][0].foldexpr = "v:lua.vim.treesitter.foldexpr()"
+		end,
+	})
+end
+
+function M.setup()
+	local ok, treesitter = pcall(require, "nvim-treesitter")
+	if not ok then
+		return
+	end
+
+	treesitter.setup({
+		install_dir = vim.fn.stdpath("data") .. "/site",
+	})
+
+	M.install_async()
+	M.attach_autocmd()
+end
+
+return M

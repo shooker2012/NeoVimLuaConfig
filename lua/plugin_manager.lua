@@ -1,6 +1,6 @@
 -- Use lazy.nvim to manage plugins.
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
-if not vim.loop.fs_stat(lazypath) then
+if not vim.uv.fs_stat(lazypath) then
   vim.fn.system({
 	"git",
 	"clone",
@@ -44,26 +44,56 @@ local plugins = {
 			vim.g.UltiSnipsSnippetDirectories = {path}
 		end,
 	},
-	"quangnguyen30192/cmp-nvim-ultisnips",
-
 	-- LSP
-	"williamboman/mason.nvim",
-	"williamboman/mason-lspconfig.nvim",
+	{
+		"williamboman/mason.nvim",
+		cmd = {
+			"Mason",
+			"MasonInstall",
+			"MasonUninstall",
+			"MasonUninstallAll",
+			"MasonUpdate",
+			"MasonLog",
+		},
+		dependencies = {
+			"williamboman/mason-lspconfig.nvim",
+		},
+		config = function()
+			require("mason").setup()
+			require("mason-lspconfig").setup({
+				ensure_installed = { "lua_ls", "pyright", "rust_analyzer" },
+				automatic_enable = false,
+			})
+		end,
+	},
 	"neovim/nvim-lspconfig",
-	"jose-elias-alvarez/null-ls.nvim", -- LSP diagnostics and code actions
 
 
 	-- nvim-cmp
-	"hrsh7th/cmp-nvim-lsp",
-  	"hrsh7th/cmp-nvim-lua",
-	"hrsh7th/cmp-buffer",
-	"hrsh7th/cmp-path",
-	"hrsh7th/cmp-cmdline",
 	-- "saadparwaiz1/cmp_luasnip",
 	{
 		"hrsh7th/nvim-cmp",
+		event = { "InsertEnter", "CmdlineEnter" },
+		dependencies = {
+			"hrsh7th/cmp-nvim-lsp",
+			"hrsh7th/cmp-nvim-lua",
+			"hrsh7th/cmp-buffer",
+			"hrsh7th/cmp-path",
+			"hrsh7th/cmp-cmdline",
+			"quangnguyen30192/cmp-nvim-ultisnips",
+		},
 		config = function(plugin, opts)
 			require "Plugins.nvim-cmp"
+		end,
+	},
+	{
+		"stevearc/conform.nvim",
+		cmd = "ConformInfo",
+		init = function()
+			require("Plugins.conform").register_command()
+		end,
+		config = function()
+			require("Plugins.conform").setup()
 		end,
 	},
 
@@ -71,9 +101,13 @@ local plugins = {
 	-- vim-matchup
 	{
 		"andymass/vim-matchup",
-		event = "VimEnter",
-		config = function(plugin, opts)
-		  vim.g.matchup_matchparen_offscreen = { method = "popup" }
+		-- Load before the initial FileType event. Loading on VimEnter misses the
+		-- first file passed on the command line, leaving that buffer uninitialized.
+		lazy = false,
+		init = function()
+			vim.g.matchup_matchparen_offscreen = { method = "popup" }
+			vim.g.matchup_treesitter_enabled = 1
+			vim.g.matchup_treesitter_disabled = { "c", "ruby" }
 		end,
 	},
 
@@ -91,6 +125,7 @@ local plugins = {
 	-- hop.nvim. supplant easy-motion.
 	{
 		"smoka7/hop.nvim",
+		keys = { { "s", mode = "" } },
 		-- version = "*",
 		opts = {
 			case_insensitive = true
@@ -116,7 +151,7 @@ local plugins = {
 	{
 		"numToStr/Comment.nvim",
 		opts = {},
-		lazy = false,
+		event = "VeryLazy",
 	},
 
 	-- Surround
@@ -166,8 +201,12 @@ local plugins = {
 	-- Telescope
 	{
 		"nvim-telescope/telescope.nvim",
-
-		opts = { rocks = {enabled = false}},
+		keys = {
+			{ "<C-p>", mode = { "n", "v" } },
+			{ "<C-f>", mode = { "n", "v" } },
+			{ "<C-b>", mode = { "n", "v" } },
+			{ "<F3>", mode = { "n", "v" } },
+		},
 		dependencies = {
 			{ 
 				"nvim-telescope/telescope-live-grep-args.nvim" ,
@@ -189,8 +228,9 @@ local plugins = {
 	-- Treesitter
 	{
 		"nvim-treesitter/nvim-treesitter",
-		config = function(plugins, opts)
-			require("Plugins.treesitter")
+		branch = "main",
+		config = function()
+			require("Plugins.treesitter").setup()
 		end,
 	},
 
@@ -211,18 +251,24 @@ local plugins = {
 			-- vim.g.no_go_maps = true
 		end,
 		config = function()
-			-- put your config here
+			require("Plugins.textobjects").setup()
 		end,
 	},
 
-	"nvim-treesitter/nvim-treesitter-context",
-
-	-- vim-matchup
-	"andymass/vim-matchup",
+	{
+		"nvim-treesitter/nvim-treesitter-context",
+		event = "VeryLazy",
+		opts = {
+			enable = true,
+			max_lines = 0,
+			mode = "cursor",
+		},
+	},
 
 	-- aerial.nvim
 	{
 		"stevearc/aerial.nvim",
+		keys = { "<F4>", "<S-F4>" },
 		config = function(plugins, opts)
 			local aerial = require("aerial")
 			aerial.setup({
@@ -263,71 +309,15 @@ local plugins = {
 		end,
 	},
 
-	-- Copilot
-	{
-		"zbirenbaum/copilot.lua",
-		cmd = "Copilot",
-		event = "InsertEnter",
-		config = function()
-			require("copilot").setup({
-				-- suggestion = { enabled = false },
-
-				-- use default
-				-- suggestion = {
-				-- 	enabled = true,
-				-- 	auto_trigger = true,
-				-- 	hide_during_completion = true,
-				-- 	debounce = 75,
-				-- 	keymap = {
-				-- 		accept = "<M-l>",
-				-- 		accept_word = false,
-				-- 		accept_line = false,
-				-- 		next = "<M-]>",
-				-- 		prev = "<M-[>",
-				-- 		dismiss = "<C-]>",
-				-- 	},
-				-- },
-
-				panel = { enabled = false },
-			})
-		end,
-	},
-	{
-		"zbirenbaum/copilot-cmp",
-		config = function ()
-			require("copilot_cmp").setup()
-		end
-
-	},
-	-- Copilot chat,
-	{
-		"CopilotC-Nvim/CopilotChat.nvim",
-		opts = {
-			-- See Configuration section for options
-			prompts = {
-				DebugRunPath = {
-					-- prompt = 'warning all run path and relevant value with prefix "~~~~~~~~~~debug: "',
-					prompt = '在所有执行路径中添加 `warn()` 函数作为 debug log。在分支路径前输出决定分支的变量及其表达式，前缀为 "\\~\\~\\~\\~\\~\\~\\~\\~\\~\\~debug: [%相关环境名%] "，并且在前缀后加入与分支代码层级相应的缩进。这有助于在调试时更清晰地了解代码的执行路径和变量的状态。一个分支所有的变量，应该在一行log中。',
-					-- system_prompt = 'You are very good at explaining stuff',
-					-- mapping = '<leader>ccmc',
-					-- description = 'My custom prompt description',
-				},
-			},
-		},
-		config = function(plugins, opts)
-			require("CopilotChat").setup(opts)
-			vim.cmd.cnoreabbrev("CC CopilotChat")
-		end
-	},
-
 	-- ============================================================Vimscript Plugins============================================================
-	"godlygeek/tabular",    -- Tabular
-	"tommcdo/vim-exchange", -- vim exchange
-	"tpope/vim-abolish",    -- vim abolish
+	{ "godlygeek/tabular", event = "VeryLazy" },    -- Tabular
+	{ "tommcdo/vim-exchange", event = "VeryLazy" }, -- vim exchange
+	{ "tpope/vim-abolish", event = "VeryLazy" },    -- vim abolish
 
 	-- vim mark
 	{
 		"inkarkat/vim-mark",
+		event = "VeryLazy",
 		dependencies = {
 			"inkarkat/vim-ingo-library",
 		},
@@ -347,8 +337,6 @@ nnoremap <silent> <C-l> :<C-u>nohlsearch<CR>:<C-u>MarkClear<CR><C-l>
 nnoremap <silent> <C-k> :<C-u>Mark<CR>
 ]])
 
-opts = { rocks = { enabled = false } }
+require("lazy").setup(plugins, { rocks = { enabled = false } })
 
-require("lazy").setup(plugins, opts)
-
-require("Plugins.lsp.lsp")
+require("Plugins.lsp.lsp").setup()

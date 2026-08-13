@@ -1,49 +1,71 @@
-# NeoVim安装步骤
+# Neovim 安装步骤
 
-## 1. [安装NeoVim](https://github.com/neovim/neovim/releases/latest/download/nvim-win64.msi)
+## 1. 安装 Neovim
 
-## 2. 配置NeoVim
-将https://github.com/shooker2012/NeoVimLuaConfig Clone到%localappdata%/nvim中
+从 [Neovim Releases](https://github.com/neovim/neovim/releases/latest/download/nvim-win64.msi) 安装 Windows 版本。
 
-'''git clone https://github.com/shooker2012/NeoVimLuaConfig.git %localappdata%/nvim'''
+## 2. 安装配置
 
-## 3. 安装相关软件
+将配置克隆到 `%LOCALAPPDATA%/nvim`：
 
-### 3.1 [Python3](https://www.python.org/ftp/python/3.12.1/python-3.12.1-amd64.exe)
+```powershell
+git clone https://github.com/shooker2012/NeoVimLuaConfig.git $env:LOCALAPPDATA\nvim
+```
 
-安装完成后：
+## 3. 安装运行依赖
 
-#### 3.1.1 设置$PATH
+### Python 3 与 pynvim
 
-安装python3安装后，将exe目录添加到$PATH，并设置为较高等级。（否则, 命令行下python会找到windows商店中的python）
+安装 [Python 3](https://www.python.org/downloads/)，将其可执行文件目录加入 `PATH`，然后安装 Neovim Python provider：
 
-#### 3.1.2 为neovim安装pyvim
+```powershell
+pip install pynvim
+```
 
-'''pip3 install pynvim'''
+### Node.js 与 tree-sitter CLI
 
-~~'''python3 -m pip install --user --upgrade pynvim'''~~
+安装 [Node.js](https://nodejs.org/en/download/)，再安装 nvim-treesitter `main` 分支用于生成和编译 parser 的 CLI：
 
-### 3.2 [node.js](https://nodejs.org/en/download/)
+```powershell
+npm install -g tree-sitter-cli
+```
 
+parser 不再使用 Zig 编译。请确保 `tree-sitter --version` 可以在启动 Neovim 的同一环境中运行。
 
-### 3.3 ripgrep
+### ripgrep
 
-【依赖插件】 Telescope
+Telescope 文本搜索依赖 [ripgrep](https://github.com/BurntSushi/ripgrep/releases)。Windows 可安装 `pc-windows-msvc.zip` 版本，并将 `rg.exe` 所在目录加入 `PATH`。
 
-#### 安装
+## 4. 安装 LSP server
 
-[Releases · BurntSushi/ripgrep (github.com)](https://github.com/BurntSushi/ripgrep/releases)
+`lua_ls`、`pyright` 和 `rust_analyzer` 统一由 Mason 管理。Mason 已改为按命令懒加载，因此新机器首次使用前需要在 Neovim 中执行：
 
-安装pc-windows-msvc.zip版本即可。
+```vim
+:Mason
+```
 
-### 3.4 zig
+然后安装 `lua-language-server`、`pyright` 和 `rust-analyzer`。也可以直接执行：
 
-【依赖插件】Treesitter
+```vim
+:MasonInstall lua-language-server pyright rust-analyzer
+```
 
-#### 安装
+配置会在启动时优先使用 Mason 的 `bin` 目录；不会隐式改用系统 PATH 或 rustup 中的同名 server。
 
-[Download ⚡ Zig Programming Language (ziglang.org)](https://ziglang.org/download/)
+## 5. 可选 formatter
 
-安装x86_64即可。
+`:Format` 由 conform.nvim 提供，但下列 formatter 是独立的系统可执行文件，配置不会自动安装：
 
-安装后，需要将exe所在目录添加到环境变量$PATH中。
+- C/C++：`clang-format`
+- Lua：`stylua`
+- Python：优先 `ruff`，后备 `black`
+- Rust：通过 `rust_analyzer` 调用 `rustfmt`
+
+可按需安装，例如：
+
+```powershell
+pip install ruff black
+cargo install stylua
+```
+
+`clang-format` 可随 LLVM 安装。安装后请确认对应命令位于 `PATH`；缺失时 `:Format` 会显示可读提示，不会自动下载工具。
