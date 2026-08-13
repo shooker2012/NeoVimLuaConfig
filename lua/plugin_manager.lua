@@ -26,22 +26,17 @@ local plugins = {
 		-- this is equalent to setup({}) function
 	},
 
-	-- -- LuaSnip
-	-- {
-	-- 	"L3MON4D3/LuaSnip",
-	-- 	-- follow latest release.
-	-- 	--version = "v2.*", -- Replace <CurrentMajor> by the latest released major (first number of latest release)
-	-- 	config = function(plugin, opts)
-	-- 		require("luasnip.loaders.from_snipmate").lazy_load()
-	-- 	end,
-	-- },
-
-	-- UltiSnips
+	-- Snippet engine. It is also a dependency of nvim-cmp, so lazy.nvim loads
+	-- it before the completion configuration on the first InsertEnter.
 	{
-		"SirVer/ultisnips",
-		config = function(plugin, opts)
-			local path = vim.fn.fnamemodify(vim.env.MYVIMRC, ":p:h").."/ultisnips"
-			vim.g.UltiSnipsSnippetDirectories = {path}
+		"L3MON4D3/LuaSnip",
+		version = "v2.*",
+		event = "InsertEnter",
+		keys = {
+			{ "<Tab>", mode = "v" },
+		},
+		config = function()
+			require("Plugins.luasnip").setup()
 		end,
 	},
 	-- LSP
@@ -70,17 +65,17 @@ local plugins = {
 
 
 	-- nvim-cmp
-	-- "saadparwaiz1/cmp_luasnip",
 	{
 		"hrsh7th/nvim-cmp",
 		event = { "InsertEnter", "CmdlineEnter" },
 		dependencies = {
+			"L3MON4D3/LuaSnip",
 			"hrsh7th/cmp-nvim-lsp",
 			"hrsh7th/cmp-nvim-lua",
 			"hrsh7th/cmp-buffer",
 			"hrsh7th/cmp-path",
 			"hrsh7th/cmp-cmdline",
-			"quangnguyen30192/cmp-nvim-ultisnips",
+			"saadparwaiz1/cmp_luasnip",
 		},
 		config = function(plugin, opts)
 			require "Plugins.nvim-cmp"
