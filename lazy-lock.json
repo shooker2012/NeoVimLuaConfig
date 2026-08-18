@@ -27,7 +27,7 @@
   "plenary.nvim": { "branch": "master", "commit": "b9fd5226c2f76c951fc8ed5923d85e4de065e509" },
   "popup.nvim": { "branch": "master", "commit": "b7404d35d5d3548a82149238289fa71f7f6de4ac" },
   "sal-custom-macro": { "branch": "main", "commit": "01831dc4533d8207292492f91acf3b7011ffa4eb" },
-  "sal-proj-lua": { "branch": "main", "commit": "14e041dd3984c7803e44cedcdb9fe25c06143e1d" },
+  "sal-proj-lua": { "branch": "main", "commit": "d267739bb82ccaac3b7cb12a39cad0487cf4c473" },
   "tabular": { "branch": "master", "commit": "12437cd1b53488e24936ec4b091c9324cafee311" },
   "telescope-live-grep-args.nvim": { "branch": "master", "commit": "8ad632f793fd437865f99af5684f78300dac93fb" },
   "telescope-zf-native.nvim": { "branch": "master", "commit": "5721be27df11a19b9cd95e6a4887f16f26599802" },
