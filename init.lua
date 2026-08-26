@@ -16,8 +16,28 @@ vim.opt.fileencoding = "utf-8"
 vim.opt.encoding = "utf-8"
 vim.opt.fileencodings = {"utf-8","cp936","ucs-bom","shift-jis","latin1","big5","gb18030","gbk","gb2312"}
 
-vim.opt.guifont="Consolas:h11"
-vim.opt.guifontwide="NSimSun:h12"
+-- Use platform-native GUI fonts.
+if vim.fn.has("win32") == 1 then
+	vim.opt.guifont = "Consolas:h11"
+	vim.opt.guifontwide = "NSimSun:h12"
+elseif vim.fn.has("macunix") == 1 then
+	vim.opt.guifont = "Menlo:h11"
+	vim.opt.guifontwide = "PingFang SC:h12"
+else
+	vim.opt.guifont = "monospace:h11"
+end
+
+-- Include common Homebrew executable directories on macOS.
+if vim.fn.has("macunix") == 1 then
+	local path = vim.env.PATH or ""
+	local extra = { "/opt/homebrew/bin", "/usr/local/bin" }
+	for _, dir in ipairs(extra) do
+		if not path:find(dir, 1, true) then
+			path = dir .. ":" .. path
+		end
+	end
+	vim.env.PATH = path
+end
 
 vim.opt.mouse = "a"
 vim.opt.termguicolors = true
