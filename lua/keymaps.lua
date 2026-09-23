@@ -16,10 +16,34 @@ endfunction
 xnoremap * :<C-u>call <SID>VSetSearch()<CR>/<C-R>=@/<CR><CR>N
 xnoremap # :<C-u>call <SID>VSetSearch()<CR>?<C-R>=@/<CR><CR>
 
-" map F2 to search selected in current file
-nnoremap <F2> :vim //j %<CR>
-xnoremap <F2> :<C-u>call <SID>VSetSearch()<CR>/<C-R>=@/<CR><CR>N:vim /<C-R>=@/<CR>/j %<CR>
 ]])
+
+local function search_visual_selection()
+	local start = vim.fn.getpos("'<")
+	local finish = vim.fn.getpos("'>")
+	if start[2] > finish[2] or (start[2] == finish[2] and start[3] > finish[3]) then
+		start, finish = finish, start
+	end
+	local start_row, start_col = start[2] - 1, start[3] - 1
+	local end_row, end_col = finish[2] - 1, finish[3]
+	local lines = vim.api.nvim_buf_get_text(0, start_row, start_col, end_row, end_col, {})
+	if #lines == 0 then
+		return
+	end
+	local literal = vim.fn.escape(table.concat(lines, "\n"), "\\")
+	literal = literal:gsub("\n", "\\n")
+	local regex = "\\V" .. literal
+	vim.fn.setreg("/", regex)
+	require("vimgrepbuffer").search(regex, { jump = false })
+end
+
+vim.keymap.set("n", "<F2>", function()
+	require("vimgrepbuffer").vimgrep_buffer("//j", { jump = false })
+end, { silent = true, desc = "Repeat search in quickfix" })
+
+vim.keymap.set("x", "<F2>", function()
+	search_visual_selection()
+end, { silent = true, desc = "Search selection in quickfix" })
 
 vim.keymap.set('n', ',', '"0', opts)
 vim.keymap.set('v', ',', '"0', opts)

@@ -13,6 +13,14 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 local plugins = {
+	-- vimgrepbuffer.nvim
+	{
+		"shooker2012/vimgrepbuffer.nvim",
+		lazy = false,
+		init = function()
+			vim.g.vimgrepbuffer_long_command = 1
+		end,
+	},
 	-- Underlying
 	"nvim-lua/plenary.nvim",
 	"nvim-lua/popup.nvim",
