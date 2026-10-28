@@ -99,6 +99,10 @@ cmp.setup({
 		select = false,
 	},
 	window = {
+		-- Keep the completion popup compact; extra items remain scrollable.
+		completion = {
+			max_height = 10,
+		},
 		documentation = cmp.config.window.bordered()
 	},
 	experimental = {
@@ -118,6 +122,11 @@ local cmdline_mapping = cmp.mapping.preset.cmdline()
 
 cmp.setup.cmdline({ "/", "?" }, {
 	mapping = cmdline_mapping,
+	window = {
+		completion = {
+			max_height = 10,
+		},
+	},
 	sources = {
 		{ name = "buffer" },
 	},
@@ -128,6 +137,11 @@ cmp.setup.cmdline({ "/", "?" }, {
 
 cmp.setup.cmdline(":", {
 	mapping = cmdline_mapping,
+	window = {
+		completion = {
+			max_height = 10,
+		},
+	},
 	sources = cmp.config.sources({
 		{ name = "path" },
 	}, {
