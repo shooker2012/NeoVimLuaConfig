@@ -1,0 +1,56 @@
+vim.o.background = "dark"
+vim.cmd("highlight clear")
+if vim.fn.exists("syntax_on") == 1 then
+	vim.cmd("syntax reset")
+end
+vim.g.colors_name = "nerv-ous"
+
+local function set(group, options)
+	vim.api.nvim_set_hl(0, group, options)
+end
+
+set("Normal", { fg = "#B9C6E0", bg = "#1A1A1A" })
+set("NonText", { fg = "#2E2733", bg = "#1A1A1A" })
+set("Comment", { fg = "#615882" })
+set("Constant", { fg = "#AB2315" })
+set("Cursor", { fg = "#1A1A1A", bg = "#D0CB50" })
+set("CursorLine", { bg = "#000000" })
+set("CursorColumn", { bg = "#000000" })
+set("ColorColumn", { bg = "#262626" })
+set("Directory", { fg = "#8EAA29" })
+set("Folded", { fg = "#A9A1C7", bg = "#262626" })
+set("Function", { fg = "#8EAA29" })
+set("Identifier", { fg = "#8EAA29" })
+set("LineNr", { fg = "#615882", bg = "#262626" })
+set("MatchParen", { fg = "#1A1A1A", bg = "#D096BB" })
+set("Number", { fg = "#AB2315" })
+set("PreProc", { fg = "#D0CB50" })
+set("Statement", { fg = "#9253AD" })
+set("Special", { fg = "#FE9E47" })
+set("SpecialKey", { fg = "#D096BB" })
+set("StatusLine", { fg = "#A9A1C7", bg = "#2E254F" })
+set("StatusLineNC", { fg = "#615882", bg = "#2E2733" })
+set("String", { fg = "#D05310" })
+set("StorageClass", { fg = "#8EAA29" })
+set("Todo", { fg = "#F5E4E6", bg = "#1A1A1A" })
+set("Type", { fg = "#8EAA29" })
+set("Title", { fg = "#837FF9" })
+set("Underlined", { fg = "#837FF9", underline = true })
+set("VertSplit", { fg = "#2E2733", bg = "#2E2733" })
+set("Visual", { bg = "#400000" })
+set("IncSearch", { fg = "#1A1A1A", bg = "#D0CB50" })
+set("Search", { fg = "#1A1A1A", bg = "#FE9E47" })
+set("Error", { fg = "#F5E4E6", bg = "#AB2315" })
+set("ErrorMsg", { fg = "#000000", bg = "#AB2315" })
+set("WarningMsg", { fg = "#000000", bg = "#FE9E47" })
+set("Pmenu", { fg = "#FE9E47", bg = "#2E2733" })
+set("PmenuSel", { fg = "#000000", bg = "#8EAA29" })
+set("PmenuSbar", { fg = "#2E2733", bg = "#2E2733" })
+set("PmenuThumb", { fg = "#9253AD", bg = "#9253AD" })
+
+if vim.fn.has("spell") == 1 then
+	set("SpellBad", { sp = "#AB2315", undercurl = true })
+	set("SpellRare", { sp = "#FE9E47", undercurl = true })
+	set("SpellCap", { sp = "#9253AD", undercurl = true })
+	set("SpellLocal", { sp = "#8EAA29", undercurl = true })
+end
